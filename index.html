@@ -303,33 +303,82 @@
                     </ul>
                 </nav>
 
-                <!-- Language Toggle -->
-                <div class="mt-auto pt-6 border-t border-slate-700">
-                    <p
-                        class="text-sm text-slate-400 mb-3"
-                        data-translate-key="languageLabel"
-                    >
-                        Bahasa
-                    </p>
-                    <div class="flex space-x-2">
+                <div class="mt-auto">
+                    <!-- Fullscreen Toggle -->
+                    <div class="pt-6 border-t border-slate-700">
                         <button
-                            onclick="changeLanguage('id')"
-                            class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
+                            onclick="toggleFullScreen()"
+                            id="fullscreen-btn"
+                            class="w-full flex items-center justify-center text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
                         >
-                            ID
+                            <svg
+                                id="fs-enter-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="mr-2"
+                            >
+                                <path
+                                    d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
+                                ></path>
+                            </svg>
+                            <svg
+                                id="fs-exit-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="mr-2 hidden"
+                            >
+                                <path
+                                    d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"
+                                ></path>
+                            </svg>
+                            <span data-translate-key="fullscreenLabel"
+                                >Fullscreen</span
+                            >
                         </button>
-                        <button
-                            onclick="changeLanguage('en')"
-                            class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
+                    </div>
+
+                    <!-- Language Toggle -->
+                    <div class="mt-4 pt-4 border-t border-slate-700">
+                        <p
+                            class="text-sm text-slate-400 mb-3"
+                            data-translate-key="languageLabel"
                         >
-                            EN
-                        </button>
-                        <button
-                            onclick="changeLanguage('ja')"
-                            class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
-                        >
-                            JA
-                        </button>
+                            Bahasa
+                        </p>
+                        <div class="flex space-x-2">
+                            <button
+                                onclick="changeLanguage('id')"
+                                class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
+                            >
+                                ID
+                            </button>
+                            <button
+                                onclick="changeLanguage('en')"
+                                class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
+                            >
+                                EN
+                            </button>
+                            <button
+                                onclick="changeLanguage('ja')"
+                                class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
+                            >
+                                JA
+                            </button>
+                        </div>
                     </div>
                 </div>
             </aside>
@@ -961,6 +1010,7 @@
                     presentationTitle: "KKP Presentation",
                     presentationSubtitle: "DPR RI Kiosk",
                     languageLabel: "Language",
+                    fullscreenLabel: "Fullscreen",
                     navSlide1: "Slide 1: Title",
                     navSlide2: "Slide 2: Background",
                     navSlide3: "Slide 3: Problem",
@@ -1108,6 +1158,7 @@
                     presentationTitle: "Presentasi KKP",
                     presentationSubtitle: "Kiosk DPR RI",
                     languageLabel: "Bahasa",
+                    fullscreenLabel: "Layar Penuh",
                     navSlide1: "Slide 1: Judul",
                     navSlide2: "Slide 2: Latar Belakang",
                     navSlide3: "Slide 3: Permasalahan",
@@ -1257,6 +1308,7 @@
                     presentationTitle: "KKP プレゼンテーション",
                     presentationSubtitle: "DPR RI キオスク",
                     languageLabel: "言語",
+                    fullscreenLabel: "フルスクリーン",
                     navSlide1: "スライド1：タイトル",
                     navSlide2: "スライド2：背景",
                     navSlide3: "スライド3：問題点",
@@ -1443,7 +1495,60 @@
                 });
             }
 
-            // 4. INITIALIZATION
+            // 4. FULLSCREEN MANAGEMENT
+            function toggleFullScreen() {
+                if (
+                    !document.fullscreenElement &&
+                    !document.mozFullScreenElement &&
+                    !document.webkitFullscreenElement &&
+                    !document.msFullscreenElement
+                ) {
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.mozRequestFullScreen) {
+                        /* Firefox */
+                        document.documentElement.mozRequestFullScreen();
+                    } else if (
+                        document.documentElement.webkitRequestFullscreen
+                    ) {
+                        /* Chrome, Safari & Opera */
+                        document.documentElement.webkitRequestFullscreen();
+                    } else if (document.documentElement.msRequestFullscreen) {
+                        /* IE/Edge */
+                        document.documentElement.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        /* Firefox */
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        /* Chrome, Safari & Opera */
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        /* IE/Edge */
+                        document.msExitFullscreen();
+                    }
+                }
+            }
+
+            function updateFullscreenIcon() {
+                const isFullscreen = !!(
+                    document.fullscreenElement ||
+                    document.mozFullScreenElement ||
+                    document.webkitFullscreenElement ||
+                    document.msFullscreenElement
+                );
+                document
+                    .getElementById("fs-enter-icon")
+                    .classList.toggle("hidden", isFullscreen);
+                document
+                    .getElementById("fs-exit-icon")
+                    .classList.toggle("hidden", !isFullscreen);
+            }
+
+            // 5. INITIALIZATION
             function initializeApp() {
                 setActiveLink();
                 const savedLang = localStorage.getItem("language") || "id";
@@ -1455,6 +1560,16 @@
 
             // Listen for URL hash changes to update the active slide
             window.addEventListener("hashchange", setActiveLink);
+
+            // Listen for fullscreen changes to update the icon
+            [
+                "fullscreenchange",
+                "webkitfullscreenchange",
+                "mozfullscreenchange",
+                "msfullscreenchange",
+            ].forEach((event) =>
+                document.addEventListener(event, updateFullscreenIcon, false),
+            );
 
             // Run after HTMX swaps content to re-apply translations
             document.body.addEventListener("htmx:afterSwap", (event) => {
