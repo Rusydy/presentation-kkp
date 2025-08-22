@@ -8,8 +8,6 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <!-- HTMX CDN -->
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-        <!-- KonvaJS CDN -->
-        <script src="https://unpkg.com/konva@9.3.13/konva.min.js"></script>
         <!-- Google Fonts: Inter -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -182,7 +180,7 @@
                                 hx-swap="innerHTML"
                                 hx-push-url="true"
                                 class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-slate-200 hover:text-slate-900 font-medium transition-colors"
-                                >Slide 9: Use Case Diagram</a
+                                >Slide 9: Alur Interaksi</a
                             >
                         </li>
                         <li>
@@ -194,7 +192,7 @@
                                 hx-swap="innerHTML"
                                 hx-push-url="true"
                                 class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-slate-200 hover:text-slate-900 font-medium transition-colors"
-                                >Slide 10: Activity & Class</a
+                                >Slide 10: Activity Diagram</a
                             >
                         </li>
                         <li>
@@ -445,153 +443,13 @@
                     balik yang sering dan iteratif.
                 </p>
                 <div class="flex justify-center">
-                    <div id="rad-diagram-container"></div>
+                    <!-- Ganti src dengan path ke file Anda, contoh: "assets/RAD-mermaid.png" -->
+                    <img
+                        src="https://placehold.co/800x600/e0e7ff/3730a3?text=RAD-mermaid.png"
+                        alt="Diagram Metode RAD"
+                        class="rounded-lg shadow-md border"
+                    />
                 </div>
-                <script>
-                    (function () {
-                        if (document.getElementById("rad-diagram-container")) {
-                            const stage = new Konva.Stage({
-                                container: "rad-diagram-container",
-                                width: 700,
-                                height: 300,
-                            });
-                            const layer = new Konva.Layer();
-                            stage.add(layer);
-
-                            const colors = {
-                                box: "#f1f5f9",
-                                border: "#cbd5e1",
-                                text: "#334155",
-                                arrow: "#64748b",
-                                cycle: "#0ea5e9",
-                            };
-
-                            // Main flow boxes
-                            const reqBox = new Konva.Rect({
-                                x: 20,
-                                y: 120,
-                                width: 160,
-                                height: 60,
-                                fill: colors.box,
-                                stroke: colors.border,
-                                strokeWidth: 2,
-                                cornerRadius: 8,
-                            });
-                            const reqText = new Konva.Text({
-                                x: 20,
-                                y: 120,
-                                width: 160,
-                                height: 60,
-                                text: "Requirements\nPlanning",
-                                align: "center",
-                                verticalAlign: "middle",
-                                fontFamily: "Inter",
-                                fontSize: 14,
-                                fill: colors.text,
-                            });
-                            const conBox = new Konva.Rect({
-                                x: 520,
-                                y: 120,
-                                width: 160,
-                                height: 60,
-                                fill: colors.box,
-                                stroke: colors.border,
-                                strokeWidth: 2,
-                                cornerRadius: 8,
-                            });
-                            const conText = new Konva.Text({
-                                x: 520,
-                                y: 120,
-                                width: 160,
-                                height: 60,
-                                text: "Construction\n& Cutover",
-                                align: "center",
-                                verticalAlign: "middle",
-                                fontFamily: "Inter",
-                                fontSize: 14,
-                                fill: colors.text,
-                            });
-
-                            // Arrows
-                            const arrow1 = new Konva.Arrow({
-                                points: [180, 150, 270, 150],
-                                pointerLength: 10,
-                                pointerWidth: 10,
-                                fill: colors.arrow,
-                                stroke: colors.arrow,
-                                strokeWidth: 2,
-                            });
-                            const arrow2 = new Konva.Arrow({
-                                points: [470, 150, 520, 150],
-                                pointerLength: 10,
-                                pointerWidth: 10,
-                                fill: colors.arrow,
-                                stroke: colors.arrow,
-                                strokeWidth: 2,
-                            });
-
-                            // Iterative Cycle
-                            const cycleCircle = new Konva.Circle({
-                                x: 370,
-                                y: 150,
-                                radius: 100,
-                                stroke: colors.cycle,
-                                strokeWidth: 3,
-                            });
-                            const cycleText = new Konva.Text({
-                                x: 270,
-                                y: 140,
-                                width: 200,
-                                height: 20,
-                                text: "User Design",
-                                align: "center",
-                                fontFamily: "Inter",
-                                fontSize: 16,
-                                fontStyle: "bold",
-                                fill: colors.text,
-                            });
-
-                            const protoText = new Konva.Text({
-                                x: 370 - 35,
-                                y: 60,
-                                text: "Prototype",
-                                fontFamily: "Inter",
-                                fontSize: 14,
-                                fill: colors.cycle,
-                            });
-                            const testText = new Konva.Text({
-                                x: 260,
-                                y: 180,
-                                text: "Test",
-                                fontFamily: "Inter",
-                                fontSize: 14,
-                                fill: colors.cycle,
-                            });
-                            const refineText = new Konva.Text({
-                                x: 440,
-                                y: 180,
-                                text: "Refine",
-                                fontFamily: "Inter",
-                                fontSize: 14,
-                                fill: colors.cycle,
-                            });
-
-                            layer.add(
-                                reqBox,
-                                reqText,
-                                conBox,
-                                conText,
-                                arrow1,
-                                arrow2,
-                                cycleCircle,
-                                cycleText,
-                                protoText,
-                                testText,
-                                refineText,
-                            );
-                        }
-                    })();
-                </script>
             </div>
 
             <div id="slide-6" class="bg-white p-8 rounded-xl shadow-lg">
@@ -673,233 +531,34 @@
 
             <div id="slide-8" class="bg-white p-8 rounded-xl shadow-lg">
                 <h2 class="text-3xl font-bold text-slate-800 mb-6">
-                    Desain & Arsitektur Aplikasi
+                    Struktur Navigasi Aplikasi
                 </h2>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-xl font-semibold text-slate-800 mb-2">
-                            Struktur Navigasi
-                        </h3>
-                        <p class="text-lg text-slate-700 mb-4">
-                            Aplikasi menggunakan jenis navigasi hierarkis, di
-                            mana menu berubah tergantung konteks halaman.
-                        </p>
-                        <ul
-                            class="list-disc list-inside text-slate-700 space-y-1"
-                        >
-                            <li>
-                                Beranda
-                                <ul class="list-disc list-inside ml-6">
-                                    <li>Jadwal Sidang</li>
-                                    <li>RUU yang Sedang Dibahas</li>
-                                    <li>Profil Anggota DPR</li>
-                                    <li>Aspirasi dan Pengaduan</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold text-slate-800 mb-2">
-                            Wireframe Antarmuka
-                        </h3>
-                        <div class="space-y-4">
-                            <div class="border border-slate-200 p-3 rounded-lg">
-                                <p class="font-medium text-slate-800">
-                                    Home Page
-                                </p>
-                                <p class="text-sm text-slate-600">
-                                    Layout dasar dengan Top Bar, area Konten
-                                    utama, dan tombol Home.
-                                </p>
-                            </div>
-                            <div class="border border-slate-200 p-3 rounded-lg">
-                                <p class="font-medium text-slate-800">
-                                    Maintenance Page
-                                </p>
-                                <p class="text-sm text-slate-600">
-                                    Input untuk TOKEN, pengaturan Interval
-                                    Reload, serta tombol Submit dan Settings.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex justify-center">
+                    <!-- Ganti src dengan path ke file Anda, contoh: "assets/App-Navigation-mermaid.png" -->
+                    <img
+                        src="https://placehold.co/800x600/e0e7ff/3730a3?text=App-Navigation-mermaid.png"
+                        alt="Diagram Navigasi Aplikasi"
+                        class="rounded-lg shadow-md border"
+                    />
                 </div>
             </div>
 
             <div id="slide-9" class="bg-white p-8 rounded-xl shadow-lg">
                 <h2 class="text-3xl font-bold text-slate-800 mb-6">
-                    Perancangan UML - Use Case Diagram
+                    Alur Interaksi Aktor
                 </h2>
                 <p class="text-lg text-slate-700 mb-6">
-                    Use Case Diagram menggambarkan interaksi antara pengguna
-                    (aktor) dengan sistem.
+                    Diagram ini menggambarkan alur interaksi utama untuk
+                    Administrator dan Pengguna.
                 </p>
                 <div class="flex justify-center">
-                    <div id="use-case-container"></div>
+                    <!-- Ganti src dengan path ke file Anda, contoh: "assets/User-Admin-Flow-mermaid.png" -->
+                    <img
+                        src="https://placehold.co/800x600/e0e7ff/3730a3?text=User-Admin-Flow-mermaid.png"
+                        alt="Diagram Alur Interaksi"
+                        class="rounded-lg shadow-md border"
+                    />
                 </div>
-                <script>
-                    (function () {
-                        if (document.getElementById("use-case-container")) {
-                            const stage = new Konva.Stage({
-                                container: "use-case-container",
-                                width: 700,
-                                height: 450,
-                            });
-                            const layer = new Konva.Layer();
-                            stage.add(layer);
-
-                            const colors = {
-                                actor: "#334155",
-                                useCase: "#f1f5f9",
-                                border: "#94a3b8",
-                                line: "#64748b",
-                                system: "#e2e8f0",
-                            };
-
-                            // System Boundary
-                            const systemBox = new Konva.Rect({
-                                x: 150,
-                                y: 20,
-                                width: 400,
-                                height: 410,
-                                fill: colors.system,
-                                stroke: colors.border,
-                                strokeWidth: 2,
-                                cornerRadius: 15,
-                            });
-                            const systemText = new Konva.Text({
-                                x: 150,
-                                y: 35,
-                                width: 400,
-                                text: "Sistem Kiosk",
-                                align: "center",
-                                fontFamily: "Inter",
-                                fontSize: 16,
-                                fontStyle: "bold",
-                                fill: colors.actor,
-                            });
-                            layer.add(systemBox, systemText);
-
-                            // Function to draw an actor
-                            function createActor(x, y, label) {
-                                const group = new Konva.Group({ x, y });
-                                const head = new Konva.Circle({
-                                    x: 0,
-                                    y: 10,
-                                    radius: 10,
-                                    stroke: colors.actor,
-                                    strokeWidth: 2,
-                                });
-                                const body = new Konva.Line({
-                                    points: [0, 20, 0, 40],
-                                    stroke: colors.actor,
-                                    strokeWidth: 2,
-                                });
-                                const arms = new Konva.Line({
-                                    points: [-15, 25, 15, 25],
-                                    stroke: colors.actor,
-                                    strokeWidth: 2,
-                                });
-                                const leg1 = new Konva.Line({
-                                    points: [0, 40, -15, 60],
-                                    stroke: colors.actor,
-                                    strokeWidth: 2,
-                                });
-                                const leg2 = new Konva.Line({
-                                    points: [0, 40, 15, 60],
-                                    stroke: colors.actor,
-                                    strokeWidth: 2,
-                                });
-                                const text = new Konva.Text({
-                                    y: 70,
-                                    width: 100,
-                                    x: -50,
-                                    text: label,
-                                    align: "center",
-                                    fontFamily: "Inter",
-                                    fontSize: 14,
-                                    fontStyle: "bold",
-                                    fill: colors.actor,
-                                });
-                                group.add(head, body, arms, leg1, leg2, text);
-                                return group;
-                            }
-
-                            // Function to draw a use case
-                            function createUseCase(x, y, label) {
-                                const group = new Konva.Group({ x, y });
-                                const ellipse = new Konva.Ellipse({
-                                    width: 100,
-                                    height: 30,
-                                    fill: colors.useCase,
-                                    stroke: colors.border,
-                                    strokeWidth: 2,
-                                });
-                                const text = new Konva.Text({
-                                    width: 200,
-                                    x: -100,
-                                    height: 60,
-                                    y: -30,
-                                    text: label,
-                                    align: "center",
-                                    verticalAlign: "middle",
-                                    fontFamily: "Inter",
-                                    fontSize: 14,
-                                    fill: colors.actor,
-                                });
-                                group.add(ellipse, text);
-                                return group;
-                            }
-
-                            // Actors
-                            const userActor = createActor(70, 180, "User");
-                            const adminActor = createActor(630, 180, "Admin");
-                            layer.add(userActor, adminActor);
-
-                            // Use Cases
-                            const userCases = [
-                                { y: 100, t: "Melihat Konten" },
-                                { y: 180, t: "Mengirim Aspirasi" },
-                                { y: 260, t: "Mengirim Pengaduan" },
-                            ];
-                            userCases.forEach((uc) => {
-                                const useCase = createUseCase(250, uc.y, uc.t);
-                                const line = new Konva.Line({
-                                    points: [
-                                        userActor.x() + 30,
-                                        userActor.y() + 25,
-                                        useCase.x() - 100,
-                                        useCase.y(),
-                                    ],
-                                    stroke: colors.line,
-                                    strokeWidth: 1,
-                                });
-                                layer.add(line, useCase);
-                            });
-
-                            const adminCases = [
-                                { y: 100, t: "Mengelola Konten" },
-                                { y: 180, t: "Login" },
-                                { y: 260, t: "Lihat Aspirasi" },
-                                { y: 340, t: "Kelola Scheduler" },
-                            ];
-                            adminCases.forEach((ac) => {
-                                const useCase = createUseCase(450, ac.y, ac.t);
-                                const line = new Konva.Line({
-                                    points: [
-                                        adminActor.x() - 30,
-                                        adminActor.y() + 25,
-                                        useCase.x() + 100,
-                                        useCase.y(),
-                                    ],
-                                    stroke: colors.line,
-                                    strokeWidth: 1,
-                                });
-                                layer.add(line, useCase);
-                            });
-                        }
-                    })();
-                </script>
             </div>
 
             <div id="slide-10" class="bg-white p-8 rounded-xl shadow-lg">
@@ -910,116 +569,13 @@
                     Contoh alur kerja untuk fitur "Menyampaikan Aspirasi".
                 </p>
                 <div class="flex justify-center">
-                    <div id="activity-diagram-container"></div>
+                    <!-- Ganti src dengan path ke file Anda, contoh: "assets/Activity-Diagram-mermaid.png" -->
+                    <img
+                        src="https://placehold.co/800x600/e0e7ff/3730a3?text=Activity-Diagram-mermaid.png"
+                        alt="Diagram Aktivitas"
+                        class="rounded-lg shadow-md border"
+                    />
                 </div>
-                <script>
-                    (function () {
-                        if (
-                            document.getElementById(
-                                "activity-diagram-container",
-                            )
-                        ) {
-                            const stage = new Konva.Stage({
-                                container: "activity-diagram-container",
-                                width: 300,
-                                height: 500,
-                            });
-                            const layer = new Konva.Layer();
-                            stage.add(layer);
-
-                            const colors = {
-                                box: "#f1f5f9",
-                                border: "#cbd5e1",
-                                text: "#334155",
-                                arrow: "#64748b",
-                                start: "#22c55e",
-                                end: "#ef4444",
-                            };
-
-                            // Start Node
-                            const startNode = new Konva.Circle({
-                                x: 150,
-                                y: 30,
-                                radius: 15,
-                                fill: colors.start,
-                            });
-                            layer.add(startNode);
-
-                            let lastY = 45;
-
-                            // Activities
-                            const activities = [
-                                "Pilih Menu Aspirasi",
-                                "Mengisi Formulir",
-                                "Mengirimkan Formulir",
-                                "Sistem Menyimpan Data",
-                                "Notifikasi Sukses",
-                            ];
-
-                            activities.forEach((text, i) => {
-                                const activityGroup = new Konva.Group({
-                                    y: lastY + 25,
-                                });
-                                const rect = new Konva.Rect({
-                                    x: 50,
-                                    width: 200,
-                                    height: 50,
-                                    fill: colors.box,
-                                    stroke: colors.border,
-                                    strokeWidth: 2,
-                                    cornerRadius: 25,
-                                });
-                                const label = new Konva.Text({
-                                    x: 50,
-                                    width: 200,
-                                    height: 50,
-                                    text: text,
-                                    align: "center",
-                                    verticalAlign: "middle",
-                                    fontFamily: "Inter",
-                                    fontSize: 14,
-                                    fill: colors.text,
-                                });
-                                activityGroup.add(rect, label);
-
-                                const arrow = new Konva.Arrow({
-                                    points: [150, lastY, 150, lastY + 25],
-                                    pointerLength: 8,
-                                    pointerWidth: 8,
-                                    fill: colors.arrow,
-                                    stroke: colors.arrow,
-                                    strokeWidth: 2,
-                                });
-
-                                layer.add(arrow, activityGroup);
-                                lastY += 75;
-                            });
-
-                            // End Node
-                            const endArrow = new Konva.Arrow({
-                                points: [150, lastY, 150, lastY + 25],
-                                pointerLength: 8,
-                                pointerWidth: 8,
-                                fill: colors.arrow,
-                                stroke: colors.arrow,
-                                strokeWidth: 2,
-                            });
-                            const endOuter = new Konva.Circle({
-                                x: 150,
-                                y: lastY + 40,
-                                radius: 15,
-                                fill: colors.end,
-                            });
-                            const endInner = new Konva.Circle({
-                                x: 150,
-                                y: lastY + 40,
-                                radius: 10,
-                                fill: "white",
-                            });
-                            layer.add(endArrow, endOuter, endInner);
-                        }
-                    })();
-                </script>
             </div>
 
             <div id="slide-11" class="bg-white p-8 rounded-xl shadow-lg">
