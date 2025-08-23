@@ -1011,7 +1011,6 @@
         </div>
 
         <script>
-            // 1. TRANSLATION DATA
             const translations = {
                 en: {
                     pageTitle: "Kiosk Presentation DPR RI - Muhammad Rusydy. M",
@@ -1019,7 +1018,7 @@
                     presentationSubtitle: "DPR RI Kiosk",
                     languageLabel: "Language",
                     fullscreenLabel: "Fullscreen",
-                    exitFullscreenLabel: "Exit Fullscreen", // NEW KEY
+                    exitFullscreenLabel: "Exit Fullscreen",
                     navSlide1: "Slide 1: Title",
                     navSlide2: "Slide 2: Background",
                     navSlide3: "Slide 3: Problem",
@@ -1175,7 +1174,7 @@
                     presentationSubtitle: "Kiosk DPR RI",
                     languageLabel: "Bahasa",
                     fullscreenLabel: "Layar Penuh",
-                    exitFullscreenLabel: "Keluar Layar Penuh", // NEW KEY
+                    exitFullscreenLabel: "Keluar Layar Penuh",
                     navSlide1: "Slide 1: Judul",
                     navSlide2: "Slide 2: Latar Belakang",
                     navSlide3: "Slide 3: Permasalahan",
@@ -1332,7 +1331,7 @@
                     presentationSubtitle: "DPR RI キオスク",
                     languageLabel: "言語",
                     fullscreenLabel: "フルスクリーン",
-                    exitFullscreenLabel: "フルスクリーンを終了", // NEW KEY
+                    exitFullscreenLabel: "フルスクリーンを終了",
                     navSlide1: "スライド1：タイトル",
                     navSlide2: "スライド2：背景",
                     navSlide3: "スライド3：問題点",
@@ -1477,7 +1476,6 @@
                 },
             };
 
-            // 2. LANGUAGE CHANGE FUNCTION
             function changeLanguage(lang) {
                 localStorage.setItem("language", lang);
                 document.documentElement.lang = lang;
@@ -1514,7 +1512,6 @@
                 });
             }
 
-            // 3. ACTIVE LINK MANAGEMENT
             function setActiveLink() {
                 const hash = window.location.hash || "#slide-1";
                 document.querySelectorAll("#nav-links a").forEach((link) => {
@@ -1525,7 +1522,6 @@
                 });
             }
 
-            // 4. INITIALIZATION
             function initializeApp() {
                 setActiveLink();
                 const savedLang = localStorage.getItem("language") || "id";
