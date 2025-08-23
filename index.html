@@ -6,7 +6,10 @@
         <title data-translate-key="pageTitle"></title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        ></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -337,8 +340,14 @@
                                     d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"
                                 ></path>
                             </svg>
-                            <span x-show="!isFullscreen" data-translate-key="fullscreenLabel"></span>
-                            <span x-show="isFullscreen" data-translate-key="exitFullscreenLabel"></span>
+                            <span
+                                x-show="!isFullscreen"
+                                data-translate-key="fullscreenLabel"
+                            ></span>
+                            <span
+                                x-show="isFullscreen"
+                                data-translate-key="exitFullscreenLabel"
+                            ></span>
                         </button>
                     </div>
 
@@ -380,8 +389,7 @@
                     hx-get=""
                     hx-select="#slide-1"
                     hx-trigger="load"
-                >
-                    </div>
+                ></div>
             </main>
         </div>
 
@@ -1534,14 +1542,19 @@
             document.body.addEventListener("htmx:afterSwap", (event) => {
                 // Re-apply translation to the newly swapped content
                 const savedLang = localStorage.getItem("language") || "id";
-                const translatableElements = event.detail.target.querySelectorAll("[data-translate-key]");
+                const translatableElements =
+                    event.detail.target.querySelectorAll(
+                        "[data-translate-key]",
+                    );
 
                 // Check if the swapped element itself has a translate key
                 if (event.detail.target.hasAttribute("data-translate-key")) {
-                     const key = event.detail.target.getAttribute("data-translate-key");
-                     if (translations[savedLang][key]) {
-                        event.detail.target.innerHTML = translations[savedLang][key];
-                     }
+                    const key =
+                        event.detail.target.getAttribute("data-translate-key");
+                    if (translations[savedLang][key]) {
+                        event.detail.target.innerHTML =
+                            translations[savedLang][key];
+                    }
                 }
 
                 // Also check children of swapped element
