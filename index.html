@@ -928,6 +928,34 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <!-- Field Documentation Photos Gallery Card -->
+                    <div class="mt-10">
+                        <h3 class="text-xl font-semibold text-slate-800 mb-4" data-translate-key="s12PhotoGalleryTitle">Field Documentation Photos</h3>
+                        <div class="bg-slate-50 rounded-lg shadow p-6 border border-slate-200">
+                            <div
+                                x-data="{
+                                    photos: [
+                                        { src: 'assets/field-documentation/doc-1.jpeg', alt: 'Field Documentation 1', caption: 'Photo 1' },
+                                        { src: 'assets/field-documentation/doc-2.PNG', alt: 'Field Documentation 2', caption: 'Photo 2' },
+                                        { src: 'assets/field-documentation/doc-3.jpg', alt: 'Field Documentation 3', caption: 'Photo 3' },
+                                        { src: 'assets/field-documentation/doc-4.jpg', alt: 'Field Documentation 4', caption: 'Photo 4' },
+                                        { src: 'assets/field-documentation/doc-5.jpg', alt: 'Field Documentation 5', caption: 'Photo 5' },
+                                        { src: 'assets/field-documentation/doc-6.jpg', alt: 'Field Documentation 6', caption: 'Photo 6' },
+                                        { src: 'assets/field-documentation/doc-7.jpg', alt: 'Field Documentation 7', caption: 'Photo 7' }
+                                    ]
+                                }"
+                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+                            >
+                                <template x-for="photo in photos" :key="photo.src">
+                                    <div class="flex flex-col items-center">
+                                        <img :src="photo.src" :alt="photo.alt" class="w-full object-cover rounded-lg border border-slate-200 mb-2">
+                                        <span class="text-slate-600 text-sm" x-text="photo.caption"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
