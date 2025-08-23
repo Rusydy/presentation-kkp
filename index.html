@@ -3,13 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- Title will be set by JavaScript -->
         <title data-translate-key="pageTitle"></title>
-        <!-- Tailwind CSS CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
-        <!-- HTMX CDN -->
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-        <!-- Google Fonts: Inter -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -60,7 +57,6 @@
     </head>
     <body class="bg-slate-100">
         <div class="flex h-screen">
-            <!-- Sidebar for Slide Navigation -->
             <aside
                 class="w-72 bg-slate-800 text-white shadow-lg p-6 flex flex-col shrink-0 overflow-y-auto"
             >
@@ -285,15 +281,30 @@
                 </nav>
 
                 <div class="mt-auto">
-                    <!-- Fullscreen Toggle -->
-                    <div class="pt-6 border-t border-slate-700">
+                    <div
+                        class="pt-6 border-t border-slate-700"
+                        x-data="{
+                            isFullscreen: document.fullscreenElement !== null,
+                            toggle() {
+                                if (!document.fullscreenElement) {
+                                    document.documentElement.requestFullscreen();
+                                } else {
+                                    document.exitFullscreen();
+                                }
+                            },
+                            init() {
+                                document.addEventListener('fullscreenchange', () => {
+                                    this.isFullscreen = document.fullscreenElement !== null
+                                })
+                            }
+                        }"
+                    >
                         <button
-                            onclick="toggleFullScreen()"
-                            id="fullscreen-btn"
+                            @click="toggle()"
                             class="w-full flex items-center justify-center text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
                         >
                             <svg
-                                id="fs-enter-icon"
+                                x-show="!isFullscreen"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
                                 height="20"
@@ -310,7 +321,7 @@
                                 ></path>
                             </svg>
                             <svg
-                                id="fs-exit-icon"
+                                x-show="isFullscreen"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
                                 height="20"
@@ -320,19 +331,17 @@
                                 stroke-width="2"
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                class="mr-2 hidden"
+                                class="mr-2"
                             >
                                 <path
                                     d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"
                                 ></path>
                             </svg>
-                            <span data-translate-key="fullscreenLabel"
-                                >Fullscreen</span
-                            >
+                            <span x-show="!isFullscreen" data-translate-key="fullscreenLabel"></span>
+                            <span x-show="isFullscreen" data-translate-key="exitFullscreenLabel"></span>
                         </button>
                     </div>
 
-                    <!-- Language Toggle -->
                     <div class="mt-4 pt-4 border-t border-slate-700">
                         <p
                             class="text-sm text-slate-400 mb-3"
@@ -364,7 +373,6 @@
                 </div>
             </aside>
 
-            <!-- Main Slide Content -->
             <main class="flex-1 p-8 md:p-12 overflow-y-auto bg-slate-50">
                 <div
                     id="slide-content"
@@ -373,14 +381,11 @@
                     hx-select="#slide-1"
                     hx-trigger="load"
                 >
-                    <!-- Content will be loaded here by HTMX -->
-                </div>
+                    </div>
             </main>
         </div>
 
-        <!-- Hidden container for all slide content -->
         <div class="hidden">
-            <!-- Slide 1 -->
             <div
                 id="slide-1"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -416,7 +421,6 @@
                 </div>
             </div>
 
-            <!-- Slide 2 -->
             <div
                 id="slide-2"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -439,7 +443,6 @@
                 </ul>
             </div>
 
-            <!-- Slide 3 -->
             <div
                 id="slide-3"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -492,7 +495,6 @@
                 </div>
             </div>
 
-            <!-- Slide 4 -->
             <div
                 id="slide-4"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -515,7 +517,6 @@
                 </ul>
             </div>
 
-            <!-- Slide 5 -->
             <div
                 id="slide-5"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -537,7 +538,6 @@
                 </div>
             </div>
 
-            <!-- Slide 6 -->
             <div
                 id="slide-6"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -560,7 +560,6 @@
                 </ol>
             </div>
 
-            <!-- Slide 7 -->
             <div
                 id="slide-7"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -625,7 +624,6 @@
                 </div>
             </div>
 
-            <!-- Slide 8 -->
             <div
                 id="slide-8"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -647,7 +645,6 @@
                 </div>
             </div>
 
-            <!-- Slide 9 -->
             <div
                 id="slide-9"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -669,7 +666,6 @@
                 </div>
             </div>
 
-            <!-- Slide 10 -->
             <div
                 id="slide-10"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -719,7 +715,6 @@
                 </div>
             </div>
 
-            <!-- Slide 11 -->
             <div
                 id="slide-11"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -806,7 +801,6 @@
                 </table>
             </div>
 
-            <!-- Slide 12 -->
             <div
                 id="slide-12"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -929,7 +923,6 @@
                 </div>
             </div>
 
-            <!-- Slide 13 -->
             <div
                 id="slide-13"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -952,7 +945,6 @@
                 </ul>
             </div>
 
-            <!-- Slide 14 -->
             <div
                 id="slide-14"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
@@ -994,7 +986,6 @@
                 </div>
             </div>
 
-            <!-- Slide 15 -->
             <div
                 id="slide-15"
                 class="bg-white p-10 rounded-xl shadow-xl border border-slate-200 h-full flex flex-col items-center justify-center text-center"
@@ -1020,6 +1011,7 @@
                     presentationSubtitle: "DPR RI Kiosk",
                     languageLabel: "Language",
                     fullscreenLabel: "Fullscreen",
+                    exitFullscreenLabel: "Exit Fullscreen", // NEW KEY
                     navSlide1: "Slide 1: Title",
                     navSlide2: "Slide 2: Background",
                     navSlide3: "Slide 3: Problem",
@@ -1175,6 +1167,7 @@
                     presentationSubtitle: "Kiosk DPR RI",
                     languageLabel: "Bahasa",
                     fullscreenLabel: "Layar Penuh",
+                    exitFullscreenLabel: "Keluar Layar Penuh", // NEW KEY
                     navSlide1: "Slide 1: Judul",
                     navSlide2: "Slide 2: Latar Belakang",
                     navSlide3: "Slide 3: Permasalahan",
@@ -1331,6 +1324,7 @@
                     presentationSubtitle: "DPR RI キオスク",
                     languageLabel: "言語",
                     fullscreenLabel: "フルスクリーン",
+                    exitFullscreenLabel: "フルスクリーンを終了", // NEW KEY
                     navSlide1: "スライド1：タイトル",
                     navSlide2: "スライド2：背景",
                     navSlide3: "スライド3：問題点",
@@ -1507,7 +1501,7 @@
                 document.querySelectorAll(".lang-btn").forEach((btn) => {
                     btn.classList.toggle(
                         "active",
-                        btn.textContent.toLowerCase() === lang,
+                        btn.textContent.trim().toLowerCase() === lang,
                     );
                 });
             }
@@ -1523,60 +1517,7 @@
                 });
             }
 
-            // 4. FULLSCREEN MANAGEMENT
-            function toggleFullScreen() {
-                if (
-                    !document.fullscreenElement &&
-                    !document.mozFullScreenElement &&
-                    !document.webkitFullscreenElement &&
-                    !document.msFullscreenElement
-                ) {
-                    if (document.documentElement.requestFullscreen) {
-                        document.documentElement.requestFullscreen();
-                    } else if (document.documentElement.mozRequestFullScreen) {
-                        /* Firefox */
-                        document.documentElement.mozRequestFullScreen();
-                    } else if (
-                        document.documentElement.webkitRequestFullscreen
-                    ) {
-                        /* Chrome, Safari & Opera */
-                        document.documentElement.webkitRequestFullscreen();
-                    } else if (document.documentElement.msRequestFullscreen) {
-                        /* IE/Edge */
-                        document.documentElement.msRequestFullscreen();
-                    }
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.mozCancelFullScreen) {
-                        /* Firefox */
-                        document.mozCancelFullScreen();
-                    } else if (document.webkitExitFullscreen) {
-                        /* Chrome, Safari & Opera */
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        /* IE/Edge */
-                        document.msExitFullscreen();
-                    }
-                }
-            }
-
-            function updateFullscreenIcon() {
-                const isFullscreen = !!(
-                    document.fullscreenElement ||
-                    document.mozFullScreenElement ||
-                    document.webkitFullscreenElement ||
-                    document.msFullscreenElement
-                );
-                document
-                    .getElementById("fs-enter-icon")
-                    .classList.toggle("hidden", isFullscreen);
-                document
-                    .getElementById("fs-exit-icon")
-                    .classList.toggle("hidden", !isFullscreen);
-            }
-
-            // 5. INITIALIZATION
+            // 4. INITIALIZATION
             function initializeApp() {
                 setActiveLink();
                 const savedLang = localStorage.getItem("language") || "id";
@@ -1589,28 +1530,27 @@
             // Listen for URL hash changes to update the active slide
             window.addEventListener("hashchange", setActiveLink);
 
-            // Listen for fullscreen changes to update the icon
-            [
-                "fullscreenchange",
-                "webkitfullscreenchange",
-                "mozfullscreenchange",
-                "msfullscreenchange",
-            ].forEach((event) =>
-                document.addEventListener(event, updateFullscreenIcon, false),
-            );
-
             // Run after HTMX swaps content to re-apply translations
             document.body.addEventListener("htmx:afterSwap", (event) => {
                 // Re-apply translation to the newly swapped content
                 const savedLang = localStorage.getItem("language") || "id";
-                event.detail.target
-                    .querySelectorAll("[data-translate-key]")
-                    .forEach((element) => {
-                        const key = element.getAttribute("data-translate-key");
-                        if (translations[savedLang][key]) {
-                            element.innerHTML = translations[savedLang][key];
-                        }
-                    });
+                const translatableElements = event.detail.target.querySelectorAll("[data-translate-key]");
+
+                // Check if the swapped element itself has a translate key
+                if (event.detail.target.hasAttribute("data-translate-key")) {
+                     const key = event.detail.target.getAttribute("data-translate-key");
+                     if (translations[savedLang][key]) {
+                        event.detail.target.innerHTML = translations[savedLang][key];
+                     }
+                }
+
+                // Also check children of swapped element
+                translatableElements.forEach((element) => {
+                    const key = element.getAttribute("data-translate-key");
+                    if (translations[savedLang][key]) {
+                        element.innerHTML = translations[savedLang][key];
+                    }
+                });
             });
         </script>
     </body>
