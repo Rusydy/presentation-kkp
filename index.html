@@ -936,23 +936,48 @@
                             <div
                                 x-data="{
                                     photos: [
-                                        { src: 'assets/field-documentation/doc-1.jpeg', alt: 'Field Documentation 1', caption: 'Photo 1' },
+                                        { src: 'assets/field-documentation/doc-11.jpeg', alt: 'Field Documentation 1', caption: 'Photo 1' },
                                         { src: 'assets/field-documentation/doc-2.PNG', alt: 'Field Documentation 2', caption: 'Photo 2' },
                                         { src: 'assets/field-documentation/doc-3.jpg', alt: 'Field Documentation 3', caption: 'Photo 3' },
                                         { src: 'assets/field-documentation/doc-4.jpg', alt: 'Field Documentation 4', caption: 'Photo 4' },
                                         { src: 'assets/field-documentation/doc-5.jpg', alt: 'Field Documentation 5', caption: 'Photo 5' },
                                         { src: 'assets/field-documentation/doc-6.jpg', alt: 'Field Documentation 6', caption: 'Photo 6' },
                                         { src: 'assets/field-documentation/doc-7.jpg', alt: 'Field Documentation 7', caption: 'Photo 7' }
-                                    ]
+                                    ],
+                                    current: 0,
+                                    prev() { this.current = (this.current === 0) ? this.photos.length - 1 : this.current - 1 },
+                                    next() { this.current = (this.current === this.photos.length - 1) ? 0 : this.current + 1 }
                                 }"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+                                class="relative flex flex-col items-center"
                             >
-                                <template x-for="photo in photos" :key="photo.src">
-                                    <div class="flex flex-col items-center">
-                                        <img :src="photo.src" :alt="photo.alt" class="w-full object-cover rounded-lg border border-slate-200 mb-2">
-                                        <span class="text-slate-600 text-sm" x-text="photo.caption"></span>
-                                    </div>
-                                </template>
+                                <div class="w-full flex justify-center items-center">
+                                    <button @click="prev" class="absolute left-0 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition disabled:opacity-50" :disabled="photos.length <= 1">
+                                        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                    </button>
+                                    <img
+                                        :src="photos[current].src"
+                                        :alt="photos[current].alt"
+                                        class="w-full max-w-md object-contain rounded-lg border border-slate-200 transition-all duration-300"
+                                        @error="if ($event.target.src !== `https://placehold.co/600x1000?text=${encodeURIComponent(photos[current].alt)}`) { $event.target.src = `https://placehold.co/600x1000?text=${encodeURIComponent(photos[current].alt)}` }"
+                                    >
+                                    <button @click="next" class="absolute right-0 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition disabled:opacity-50" :disabled="photos.length <= 1">
+                                        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span class="text-slate-600 text-sm mt-2" x-text="photos[current].caption"></span>
+                                <div class="flex gap-2 mt-4">
+                                    <template x-for="(photo, idx) in photos" :key="photo.src">
+                                        <button
+                                            class="w-3 h-3 rounded-full"
+                                            :class="{'bg-slate-700': idx === current, 'bg-slate-300': idx !== current}"
+                                            @click="current = idx"
+                                        ></button>
+                                    </template>
+                                </div>
                             </div>
                         </div>
                     </div>
