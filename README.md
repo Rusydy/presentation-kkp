@@ -1,55 +1,96 @@
-# Kiosk Presentation DPR RI
+# KKP Presentation Kiosk
 
-This project is a modern, web-based presentation system designed for a kiosk environment at the DPR RI. It's built as a single-page application (SPA) using a combination of HTML, Tailwind CSS, and JavaScript, with HTMX handling the dynamic content loading for a smooth, app-like experience.
+This is a single-page, multi-language presentation website designed to function as an interactive kiosk. It's built with modern, lightweight web technologies to create a smooth, app-like experience without requiring a backend. The project uses **HTMX** for dynamic content loading, **Alpine.js** for simple interactivity, and **Tailwind CSS** for styling.
 
-## ✨ Key Features
+## ✨ Features
 
-- **Seamless Slide Navigation**: Utilizes HTMX to load presentation slides dynamically without requiring a full page reload, providing a fast and fluid user experience.
+- **Dynamic Slide Loading**: Navigates between presentation slides without full page reloads, thanks to HTMX.
+- **Multi-Language Support**: Easily switch between Indonesian (ID), English (EN), and Japanese (JA). The content is managed from a single JavaScript object.
+- **Persistent Language Choice**: Remembers the user's selected language using the browser's `localStorage`.
+- **Active State Navigation**: The sidebar automatically highlights the currently active slide.
+- **URL Hash Routing**: The browser's URL hash updates on navigation (e.g., `#slide-2`), allowing slides to be bookmarked and shared.
+- **Fullscreen Mode**: A simple toggle to enter and exit fullscreen mode, perfect for a kiosk display.
+- **Fully Static**: No backend or build process required. The entire presentation runs directly in the browser.
+- **Modern UI**: Clean and professional design using Tailwind CSS and the Inter font.
 
-- **Multilingual Support**: A robust, built-in translation system allows users to switch between Indonesian, English, and Japanese on the fly. The selected language is saved in the browser's local storage for persistence.
-
-- **Immersive Fullscreen Mode**: Includes a fullscreen toggle to allow the presentation to occupy the entire screen, perfect for a kiosk setting.
-
-- **Modern & Responsive UI**: Styled with Tailwind CSS for a clean, professional, and responsive interface that adapts well to different screen sizes.
+---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6+)
+- **HTML5**: The core structure of the presentation.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **HTMX**: Enables dynamic content loading directly from HTML attributes.
+- **Alpine.js**: A rugged, minimal framework for composing JavaScript behavior in your markup. Used here for the fullscreen toggle.
+- **Vanilla JavaScript**: Handles the translation logic and application initialization.
 
-- **Dynamic Content**: HTMX
+---
 
-## 🚀 How It Works
+## 🚀 Getting Started
 
-The application is architected as a single `index.html` file to keep it simple and portable.
+This project is a static website. No complex setup is needed.
 
-1. **Content Loading**: All slide content is stored in a hidden `<div>` within the `index.html` file. The sidebar navigation links use HTMX attributes (hx-get, hx-select, hx-target) to fetch the corresponding slide's HTML from this hidden container and inject it into the main content area.
+1. **Clone the repository or download the files.**
+2. **Ensure you have an `assets` folder** in the same directory as your `index.html` file, containing the required images:
+   - `RAD-mermaid.png`
+   - `App-Navigation-mermaid.png`
+   - `User-Admin-Flow-mermaid.png`
+   - `Class-mermaid.png`
+3. **Open the `index.html` file** in any modern web browser.
 
-2. **URL & State Management**: HTMX's hx-push-url="true" attribute updates the URL hash (e.g., #slide-2) whenever a new slide is loaded. A `hashchange` event listener in the JavaScript code detects this change and calls the setActiveLink() function to update the visual focus in the sidebar navigation.
+That's it! The presentation should now be running.
 
-3. **Translation System**:
+---
 
-- All translatable text is stored in a translations object in the main script.
+## ⚙️ How It Works
 
-- HTML elements that need translation are marked with a data-translate-key attribute.
+### Slide Loading with HTMX
 
-- The `changeLanguage(lang)` function iterates through these elements and updates their content based on the selected language.
+The presentation avoids full page reloads by using HTMX. All slide content is pre-written in hidden `<div>` elements at the bottom of the `index.html` file.
 
-## 📂 Setup and Usage
+- Each navigation link in the sidebar has `hx-` attributes:
 
-No complex build process is required.
+  ```html
+  <a
+    href="#slide-2"
+    hx-get=""
+    hx-select="#slide-2"
+    hx-target="#slide-content"
+    hx-swap="innerHTML"
+    hx-push-url="true"
+  >
+    ...
+  </a>
+  ```
 
-1. Clone or download the repository.
+- **`hx-get`**: When a link is clicked, HTMX makes a GET request to the current page URL (since `hx-get` is empty).
+- **`hx-select`**: From the response (the full HTML page), it selects only the content inside the `#slide-2` div.
+- **`hx-target`**: It then places this selected content into the `#slide-content` div in the main view.
+- **`hx-push-url="true"`**: It updates the browser's URL hash to match the link's `href`.
 
-2. Serve the `index.html` file. You can use a simple local server for this. If you have Python installed, you can run:
+### Multi-Language Translation
 
-```bash
-python -m http.server
-```
+The translation system is powered by a simple JavaScript function.
 
-or if you have Node.js installed, you can use a package like `http-server`:
+1. A `translations` object in the `<script>` tag holds all the text content for each language.
 
-```bash
-npx http-server
-```
+   ```javascript
+   const translations = {
+     en: {
+       pageTitle: "Presentation Title",
+       // ...
+     },
+     id: {
+       pageTitle: "Judul Presentasi",
+       // ...
+     },
+   };
+   ```
 
-Open the provided URL (e.g., `http://localhost:8000`) in your web browser.
+2. HTML elements that need translation are tagged with a `data-translate-key` attribute.
+
+   ```html
+   <h1 data-translate-key="presentationTitle"></h1>
+   ```
+
+3. The `changeLanguage(lang)` function iterates through all elements with this attribute and sets their `innerHTML` to the corresponding value from the `translations` object.
+4. This function is called on page load and whenever a language button is clicked. It also runs after every HTMX content swap to ensure new content is translated correctly.
