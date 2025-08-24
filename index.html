@@ -1,1619 +1,407 @@
 <!doctype html>
 <html lang="id">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title data-translate-key="pageTitle"></title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        ></script>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            /* Use Inter font as the default font */
-            body {
-                font-family: "Inter", sans-serif;
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-            }
-            /* Modern scrollbar style */
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
-            ::-webkit-scrollbar-track {
-                background: #1e293b;
-            }
-            ::-webkit-scrollbar-thumb {
-                background: #475569;
-                border-radius: 10px;
-            }
-            ::-webkit-scrollbar-thumb:hover {
-                background: #64748b;
-            }
 
-            /* Fade-out animation for HTMX content swap */
-            #slide-content.htmx-swapping {
-                opacity: 0;
-                transition: opacity 200ms ease-out;
-            }
-            /* Class for active navigation links */
-            .active-slide {
-                background-color: #4f46e5; /* Purple for active slide */
-                color: #ffffff;
-                font-weight: 600;
-            }
-            /* Style for the active language button */
-            .lang-btn.active {
-                background-color: #4f46e5;
-                color: #ffffff;
-                font-weight: bold;
-                cursor: default;
-            }
-        </style>
-    </head>
-    <body class="bg-slate-100">
-        <div class="flex h-screen">
-            <aside
-                class="w-72 bg-slate-800 text-white shadow-lg p-6 flex flex-col shrink-0 overflow-y-auto"
-            >
-                <div
-                    class="flex items-center mb-10 border-b border-slate-700 pb-6"
-                >
-                    <div class="bg-indigo-600 text-white rounded-lg p-3 mr-4">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="feather feather-airplay"
-                        >
-                            <path
-                                d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"
-                            ></path>
-                            <polygon points="12 15 17 21 7 21 12 15"></polygon>
-                        </svg>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-translate-key="pageTitle"></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body { font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        #slide-content.htmx-swapping { opacity: 0; transition: opacity 200ms ease-out; }
+        .active-slide { background-color: #4f46e5; color: #ffffff; font-weight: 600; }
+        .lang-btn.active { background-color: #4f46e5; color: #ffffff; font-weight: bold; cursor: default; }
+    </style>
+</head>
+
+<body
+    class="bg-slate-100"
+    x-data="app()"
+    x-init="init()"
+>
+    <div class="flex h-screen">
+        <aside class="w-72 bg-slate-800 text-white shadow-lg p-6 flex flex-col shrink-0 overflow-y-auto">
+            <div class="flex items-center mb-10 border-b border-slate-700 pb-6">
+                <div class="bg-indigo-600 text-white rounded-lg p-3 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay">
+                        <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path>
+                        <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white" data-translate-key="presentationTitle"></h1>
+                    <p class="text-sm text-slate-400" data-translate-key="presentationSubtitle"></p>
+                </div>
+            </div>
+            <nav class="flex-grow">
+                <ul id="nav-links" class="space-y-2">
+                    <li><a href="#slide-1" :class="{'active-slide': activeSlide === '#slide-1'}" class="nav-link" data-translate-key="navSlide1"></a></li>
+                    <li><a href="#slide-2" :class="{'active-slide': activeSlide === '#slide-2'}" class="nav-link" data-translate-key="navSlide2"></a></li>
+                    <li><a href="#slide-3" :class="{'active-slide': activeSlide === '#slide-3'}" class="nav-link" data-translate-key="navSlide3"></a></li>
+                    <li><a href="#slide-4" :class="{'active-slide': activeSlide === '#slide-4'}" class="nav-link" data-translate-key="navSlide4"></a></li>
+                    <li><a href="#slide-5" :class="{'active-slide': activeSlide === '#slide-5'}" class="nav-link" data-translate-key="navSlide5"></a></li>
+                    <li><a href="#slide-6" :class="{'active-slide': activeSlide === '#slide-6'}" class="nav-link" data-translate-key="navSlide6"></a></li>
+                    <li><a href="#slide-7" :class="{'active-slide': activeSlide === '#slide-7'}" class="nav-link" data-translate-key="navSlide7"></a></li>
+                    <li><a href="#slide-8" :class="{'active-slide': activeSlide === '#slide-8'}" class="nav-link" data-translate-key="navSlide8"></a></li>
+                    <li><a href="#slide-9" :class="{'active-slide': activeSlide === '#slide-9'}" class="nav-link" data-translate-key="navSlide9"></a></li>
+                    <li><a href="#slide-10" :class="{'active-slide': activeSlide === '#slide-10'}" class="nav-link" data-translate-key="navSlide10"></a></li>
+                    <li><a href="#slide-11" :class="{'active-slide': activeSlide === '#slide-11'}" class="nav-link" data-translate-key="navSlide11"></a></li>
+                    <li><a href="#slide-12" :class="{'active-slide': activeSlide === '#slide-12'}" class="nav-link" data-translate-key="navSlide12"></a></li>
+                    <li><a href="#slide-13" :class="{'active-slide': activeSlide === '#slide-13'}" class="nav-link" data-translate-key="navSlide13"></a></li>
+                    <li><a href="#slide-14" :class="{'active-slide': activeSlide === '#slide-14'}" class="nav-link" data-translate-key="navSlide14"></a></li>
+                    <li><a href="#slide-15" :class="{'active-slide': activeSlide === '#slide-15'}" class="nav-link" data-translate-key="navSlide15"></a></li>
+                </ul>
+            </nav>
+            <div class="mt-auto">
+                <div class="pt-6 border-t border-slate-700">
+                    <button @click="toggleFullscreen()" class="w-full flex items-center justify-center text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors">
+                        <svg x-show="!isFullscreen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        <svg x-show="isFullscreen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        <span x-show="!isFullscreen" data-translate-key="fullscreenLabel"></span>
+                        <span x-show="isFullscreen" data-translate-key="exitFullscreenLabel"></span>
+                    </button>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <div class="mb-4">
+                        <p class="text-sm text-slate-400 mb-2" data-translate-key="languageLabel"></p>
+                        <div class="flex space-x-2">
+                            <button @click="setLanguage('id')" :class="{'active': currentLang === 'id'}" class="lang-btn w-full text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors">ID</button>
+                            <button @click="setLanguage('en')" :class="{'active': currentLang === 'en'}" class="lang-btn w-full text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors">EN</button>
+                            <button @click="setLanguage('ja')" :class="{'active': currentLang === 'ja'}" class="lang-btn w-full text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors">JA</button>
+                        </div>
                     </div>
                     <div>
-                        <h1
-                            class="text-lg font-bold text-white"
-                            data-translate-key="presentationTitle"
-                        ></h1>
-                        <p
-                            class="text-sm text-slate-400"
-                            data-translate-key="presentationSubtitle"
-                        >
-                            Kiosk DPR RI
-                        </p>
-                    </div>
-                </div>
-                <nav class="flex-grow">
-                    <ul id="nav-links" class="space-y-2">
-                        <li>
-                            <a
-                                href="#slide-1"
-                                hx-get=""
-                                hx-select="#slide-1"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide1"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-2"
-                                hx-get=""
-                                hx-select="#slide-2"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide2"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-3"
-                                hx-get=""
-                                hx-select="#slide-3"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide3"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-4"
-                                hx-get=""
-                                hx-select="#slide-4"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide4"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-5"
-                                hx-get=""
-                                hx-select="#slide-5"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide5"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-6"
-                                hx-get=""
-                                hx-select="#slide-6"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide6"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-7"
-                                hx-get=""
-                                hx-select="#slide-7"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide7"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-8"
-                                hx-get=""
-                                hx-select="#slide-8"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide8"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-9"
-                                hx-get=""
-                                hx-select="#slide-9"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide9"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-10"
-                                hx-get=""
-                                hx-select="#slide-10"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide10"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-11"
-                                hx-get=""
-                                hx-select="#slide-11"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide11"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-12"
-                                hx-get=""
-                                hx-select="#slide-12"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide12"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-13"
-                                hx-get=""
-                                hx-select="#slide-13"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide13"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-14"
-                                hx-get=""
-                                hx-select="#slide-14"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide14"
-                            ></a>
-                        </li>
-                        <li>
-                            <a
-                                href="#slide-15"
-                                hx-get=""
-                                hx-select="#slide-15"
-                                hx-target="#slide-content"
-                                hx-swap="innerHTML"
-                                hx-push-url="true"
-                                class="block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors"
-                                data-translate-key="navSlide15"
-                            ></a>
-                        </li>
-                    </ul>
-                </nav>
-
-                <div class="mt-auto">
-                    <div
-                        class="pt-6 border-t border-slate-700"
-                        x-data="{
-                            isFullscreen: document.fullscreenElement !== null,
-                            toggle() {
-                                if (!document.fullscreenElement) {
-                                    document.documentElement.requestFullscreen();
-                                } else {
-                                    document.exitFullscreen();
-                                }
-                            },
-                            init() {
-                                document.addEventListener('fullscreenchange', () => {
-                                    this.isFullscreen = document.fullscreenElement !== null
-                                })
-                            }
-                        }"
-                    >
-                        <button
-                            @click="toggle()"
-                            class="w-full flex items-center justify-center text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
-                        >
-                            <svg
-                                x-show="!isFullscreen"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="mr-2"
-                            >
-                                <path
-                                    d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
-                                ></path>
-                            </svg>
-                            <svg
-                                x-show="isFullscreen"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="mr-2"
-                            >
-                                <path
-                                    d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"
-                                ></path>
-                            </svg>
-                            <span
-                                x-show="!isFullscreen"
-                                data-translate-key="fullscreenLabel"
-                            ></span>
-                            <span
-                                x-show="isFullscreen"
-                                data-translate-key="exitFullscreenLabel"
-                            ></span>
+                        <p class="text-sm text-slate-400 mb-2" data-translate-key="exportLabel"></p>
+                        <button @click="downloadPDF()" class="w-full flex items-center justify-center text-sm py-2 px-3 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors">
+                            <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            PDF
                         </button>
                     </div>
-
-                    <div class="mt-4 pt-4 border-t border-slate-700">
-                        <p
-                            class="text-sm text-slate-400 mb-3"
-                            data-translate-key="languageLabel"
-                        >
-                            Bahasa
-                        </p>
-                        <div class="flex space-x-2">
-                            <button
-                                onclick="changeLanguage('id')"
-                                class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
-                            >
-                                ID
-                            </button>
-                            <button
-                                onclick="changeLanguage('en')"
-                                class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
-                            >
-                                EN
-                            </button>
-                            <button
-                                onclick="changeLanguage('ja')"
-                                class="lang-btn flex-1 text-sm py-2 px-3 rounded-md bg-slate-700 hover:bg-slate-600 transition-colors"
-                            >
-                                JA
-                            </button>
-                        </div>
-                    </div>
                 </div>
-            </aside>
-
-            <main class="flex-1 p-8 md:p-12 overflow-y-auto bg-slate-50">
-                <div
-                    id="slide-content"
-                    class="transition-opacity duration-300"
-                    hx-get=""
-                    hx-select="#slide-1"
-                    hx-trigger="load"
-                ></div>
-            </main>
+            </div>
+        </aside>
+        <main class="flex-1 p-8 md:p-12 overflow-y-auto bg-slate-50">
+            <div id="slide-content" class="transition-opacity duration-300" hx-get="" hx-select="#slide-1" hx-trigger="load">
+                </div>
+        </main>
+    </div>
+    <div class="hidden">
+        <div id="slide-1" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-slate-800 mb-4 leading-tight" data-translate-key="s1Title"></h2>
+                <div class="w-24 h-1.5 bg-indigo-600 rounded-full my-8 mx-auto"></div>
+                <p class="text-xl text-slate-600 mb-2">
+                    <strong>Muhammad Rusydy. M</strong> | 10420036
+                </p>
+                <p class="text-lg text-slate-500 mb-12" data-translate-key="s1Major"></p>
+                <p class="text-lg text-slate-600 mb-12">
+                    <span data-translate-key="s1Supervisor"></span>:
+                    <strong>Erick Orlando, SKom, MMSi</strong>
+                </p>
+                <div class="mt-12">
+                    <p class="text-xl font-semibold text-slate-700">
+                        SEKOLAH TINGGI MANAJEMEN INFORMATIKA DAN KOMPUTER JAKARTA STI&K
+                    </p>
+                    <p class="text-2xl font-bold text-slate-800 mt-2">2024</p>
+                </div>
+            </div>
         </div>
-
-        <div class="hidden">
-            <div
-                id="slide-1"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <div class="text-center">
-                    <h2
-                        class="text-4xl font-bold text-slate-800 mb-4 leading-tight"
-                        data-translate-key="s1Title"
-                    ></h2>
-                    <div
-                        class="w-24 h-1.5 bg-indigo-600 rounded-full my-8 mx-auto"
-                    ></div>
-                    <p class="text-xl text-slate-600 mb-2">
-                        <strong>Muhammad Rusydy. M</strong> | 10420036
-                    </p>
-                    <p
-                        class="text-lg text-slate-500 mb-12"
-                        data-translate-key="s1Major"
-                    ></p>
-                    <p class="text-lg text-slate-600 mb-12">
-                        <span data-translate-key="s1Supervisor"></span>:
-                        <strong>Erick Orlando, SKom, MMSi</strong>
-                    </p>
-                    <div class="mt-12">
-                        <p class="text-xl font-semibold text-slate-700">
-                            SEKOLAH TINGGI MANAJEMEN INFORMATIKA DAN KOMPUTER
-                            JAKARTA STI&K
-                        </p>
-                        <p class="text-2xl font-bold text-slate-800 mt-2">
-                            2024
-                        </p>
-                    </div>
+        <div id="slide-2" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s2Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s2Subtitle"></p>
+            <ul class="space-y-5 text-lg text-slate-700 list-disc list-inside">
+                <li data-translate-key="s2Point1"></li>
+                <li data-translate-key="s2Point2"></li>
+                <li data-translate-key="s2Point3"></li>
+                <li data-translate-key="s2Point4"></li>
+            </ul>
+        </div>
+        <div id="slide-3" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s3Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s3Subtitle"></p>
+            <div class="space-y-6">
+                <div class="bg-red-50 p-5 rounded-lg border-l-4 border-red-500">
+                    <h3 class="text-xl font-semibold text-red-800 mb-2" data-translate-key="s3Problem1Title"></h3>
+                    <p class="text-lg text-red-700" data-translate-key="s3Problem1Desc"></p>
+                </div>
+                <div class="bg-yellow-50 p-5 rounded-lg border-l-4 border-yellow-500">
+                    <h3 class="text-xl font-semibold text-yellow-800 mb-2" data-translate-key="s3Problem2Title"></h3>
+                    <p class="text-lg text-yellow-700" data-translate-key="s3Problem2Desc"></p>
+                </div>
+                <div class="bg-blue-50 p-5 rounded-lg border-l-4 border-blue-500">
+                    <h3 class="text-xl font-semibold text-blue-800 mb-2" data-translate-key="s3Problem3Title"></h3>
+                    <p class="text-lg text-blue-700" data-translate-key="s3Problem3Desc"></p>
                 </div>
             </div>
-
-            <div
-                id="slide-2"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s2Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s2Subtitle"
-                ></p>
-                <ul
-                    class="space-y-5 text-lg text-slate-700 list-disc list-inside"
-                >
-                    <li data-translate-key="s2Point1"></li>
-                    <li data-translate-key="s2Point2"></li>
-                    <li data-translate-key="s2Point3"></li>
-                    <li data-translate-key="s2Point4"></li>
-                </ul>
-            </div>
-
-            <div
-                id="slide-3"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s3Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s3Subtitle"
-                ></p>
-                <div class="space-y-6">
-                    <div
-                        class="bg-red-50 p-5 rounded-lg border-l-4 border-red-500"
-                    >
-                        <h3
-                            class="text-xl font-semibold text-red-800 mb-2"
-                            data-translate-key="s3Problem1Title"
-                        ></h3>
-                        <p
-                            class="text-lg text-red-700"
-                            data-translate-key="s3Problem1Desc"
-                        ></p>
-                    </div>
-                    <div
-                        class="bg-yellow-50 p-5 rounded-lg border-l-4 border-yellow-500"
-                    >
-                        <h3
-                            class="text-xl font-semibold text-yellow-800 mb-2"
-                            data-translate-key="s3Problem2Title"
-                        ></h3>
-                        <p
-                            class="text-lg text-yellow-700"
-                            data-translate-key="s3Problem2Desc"
-                        ></p>
-                    </div>
-                    <div
-                        class="bg-blue-50 p-5 rounded-lg border-l-4 border-blue-500"
-                    >
-                        <h3
-                            class="text-xl font-semibold text-blue-800 mb-2"
-                            data-translate-key="s3Problem3Title"
-                        ></h3>
-                        <p
-                            class="text-lg text-blue-700"
-                            data-translate-key="s3Problem3Desc"
-                        ></p>
-                    </div>
+        </div>
+        <div id="slide-4" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s4Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s4Subtitle"></p>
+            <ul class="space-y-5 text-lg text-slate-700 list-disc list-inside">
+                <li data-translate-key="s4Point1"></li>
+                <li data-translate-key="s4Point2"></li>
+                <li data-translate-key="s4Point3"></li>
+                <li data-translate-key="s4Point4"></li>
+            </ul>
+        </div>
+        <div id="slide-5" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s5Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s5Subtitle"></p>
+            <div class="flex justify-center"><img src="assets/RAD-mermaid.png" alt="RAD Method Diagram" class="border" /></div>
+        </div>
+        <div id="slide-6" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s6Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s6Subtitle"></p>
+            <ol class="space-y-4 text-lg text-slate-700 list-decimal list-inside">
+                <li data-translate-key="s6Point1"></li>
+                <li data-translate-key="s6Point2"></li>
+                <li data-translate-key="s6Point3"></li>
+                <li data-translate-key="s6Point4"></li>
+            </ol>
+        </div>
+        <div id="slide-7" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s7Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s7Subtitle"></p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <h3 class="font-semibold text-slate-800 text-lg" data-translate-key="s7Sol1Title"></h3>
+                    <p class="text-slate-600 mt-1" data-translate-key="s7Sol1Desc"></p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <h3 class="font-semibold text-slate-800 text-lg" data-translate-key="s7Sol2Title"></h3>
+                    <p class="text-slate-600 mt-1" data-translate-key="s7Sol2Desc"></p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <h3 class="font-semibold text-slate-800 text-lg" data-translate-key="s7Sol3Title"></h3>
+                    <p class="text-slate-600 mt-1" data-translate-key="s7Sol3Desc"></p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <h3 class="font-semibold text-slate-800 text-lg" data-translate-key="s7Sol4Title"></h3>
+                    <p class="text-slate-600 mt-1" data-translate-key="s7Sol4Desc"></p>
                 </div>
             </div>
-
-            <div
-                id="slide-4"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s4Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s4Subtitle"
-                ></p>
-                <ul
-                    class="space-y-5 text-lg text-slate-700 list-disc list-inside"
-                >
-                    <li data-translate-key="s4Point1"></li>
-                    <li data-translate-key="s4Point2"></li>
-                    <li data-translate-key="s4Point3"></li>
-                    <li data-translate-key="s4Point4"></li>
-                </ul>
-            </div>
-
-            <div
-                id="slide-5"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s5Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s5Subtitle"
-                ></p>
-                <div class="flex justify-center">
-                    <img
-                        src="assets/RAD-mermaid.png"
-                        alt="RAD Method Diagram"
-                        class="border"
-                    />
+        </div>
+        <div id="slide-8" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s8Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s8Subtitle"></p>
+            <div class="flex justify-center"><img src="assets/App-Navigation-mermaid.png" alt="Application Navigation Diagram" class="border" /></div>
+        </div>
+        <div id="slide-9" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s9Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s9Subtitle"></p>
+            <div class="flex justify-center"><img src="assets/User-Admin-Flow-mermaid.png" alt="Interaction Flow Diagram" class="border" /></div>
+        </div>
+        <div id="slide-10" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-4" data-translate-key="s10Title"></h2>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-700 mb-3" data-translate-key="s10ActivityTitle"></h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-slate-600 ml-4"><li data-translate-key="s10ActivityDesc"></li></ul>
+                    <div class="flex justify-center"><img src="https://placehold.co/400x300/e0e7ff/3730a3?text=activity-diagram.png" alt="Activity Diagram" class="w-full h-auto rounded-md" /></div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-700 mb-3" data-translate-key="s10ClassTitle"></h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-slate-600 ml-4">
+                        <li data-translate-key="s10ClassDesc"></li>
+                        <li data-translate-key="s10ClassList"></li>
+                    </ul>
+                    <div class="flex justify-center"><img src="assets/Class-mermaid.png" alt="Class Diagram" class="border" /></div>
                 </div>
             </div>
-
-            <div
-                id="slide-6"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s6Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s6Subtitle"
-                ></p>
-                <ol
-                    class="space-y-4 text-lg text-slate-700 list-decimal list-inside"
-                >
-                    <li data-translate-key="s6Point1"></li>
-                    <li data-translate-key="s6Point2"></li>
-                    <li data-translate-key="s6Point3"></li>
-                    <li data-translate-key="s6Point4"></li>
-                </ol>
-            </div>
-
-            <div
-                id="slide-7"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s7Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s7Subtitle"
-                ></p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div
-                        class="bg-slate-50 p-5 rounded-lg border border-slate-200"
-                    >
-                        <h3
-                            class="font-semibold text-slate-800 text-lg"
-                            data-translate-key="s7Sol1Title"
-                        ></h3>
-                        <p
-                            class="text-slate-600 mt-1"
-                            data-translate-key="s7Sol1Desc"
-                        ></p>
-                    </div>
-                    <div
-                        class="bg-slate-50 p-5 rounded-lg border border-slate-200"
-                    >
-                        <h3
-                            class="font-semibold text-slate-800 text-lg"
-                            data-translate-key="s7Sol2Title"
-                        ></h3>
-                        <p
-                            class="text-slate-600 mt-1"
-                            data-translate-key="s7Sol2Desc"
-                        ></p>
-                    </div>
-                    <div
-                        class="bg-slate-50 p-5 rounded-lg border border-slate-200"
-                    >
-                        <h3
-                            class="font-semibold text-slate-800 text-lg"
-                            data-translate-key="s7Sol3Title"
-                        ></h3>
-                        <p
-                            class="text-slate-600 mt-1"
-                            data-translate-key="s7Sol3Desc"
-                        ></p>
-                    </div>
-                    <div
-                        class="bg-slate-50 p-5 rounded-lg border border-slate-200"
-                    >
-                        <h3
-                            class="font-semibold text-slate-800 text-lg"
-                            data-translate-key="s7Sol4Title"
-                        ></h3>
-                        <p
-                            class="text-slate-600 mt-1"
-                            data-translate-key="s7Sol4Desc"
-                        ></p>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                id="slide-8"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s8Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s8Subtitle"
-                ></p>
-                <div class="flex justify-center">
-                    <img
-                        src="assets/App-Navigation-mermaid.png"
-                        alt="Application Navigation Diagram"
-                        class="border"
-                    />
-                </div>
-            </div>
-
-            <div
-                id="slide-9"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s9Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s9Subtitle"
-                ></p>
-                <div class="flex justify-center">
-                    <img
-                        src="assets/User-Admin-Flow-mermaid.png"
-                        alt="Interaction Flow Diagram"
-                        class="border"
-                    />
-                </div>
-            </div>
-
-            <div
-                id="slide-10"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-4"
-                    data-translate-key="s10Title"
-                ></h2>
-                <div class="space-y-8">
-                    <div>
-                        <h3
-                            class="text-2xl font-semibold text-slate-700 mb-3"
-                            data-translate-key="s10ActivityTitle"
-                        ></h3>
-                        <ul
-                            class="list-disc list-inside space-y-2 text-lg text-slate-600 ml-4"
-                        >
-                            <li data-translate-key="s10ActivityDesc"></li>
-                        </ul>
-                        <div class="flex justify-center">
-                            <img
-                                src="https://placehold.co/400x300/e0e7ff/3730a3?text=activity-diagram.png"
-                                alt="Activity Diagram"
-                                class="w-full h-auto rounded-md"
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <h3
-                            class="text-2xl font-semibold text-slate-700 mb-3"
-                            data-translate-key="s10ClassTitle"
-                        ></h3>
-                        <ul
-                            class="list-disc list-inside space-y-2 text-lg text-slate-600 ml-4"
-                        >
-                            <li data-translate-key="s10ClassDesc"></li>
-                            <li data-translate-key="s10ClassList"></li>
-                        </ul>
-                        <div class="flex justify-center">
-                            <img
-                                src="assets/Class-mermaid.png"
-                                alt="Class Diagram"
-                                class="border"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                id="slide-11"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s11Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s11Subtitle"
-                ></p>
+        </div>
+        <div id="slide-11" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s11Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s11Subtitle"></p>
+            <table class="w-full text-lg border-collapse">
+                <thead><tr class="bg-slate-100"><th class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200" data-translate-key="s11CatHeader"></th><th class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200" data-translate-key="s11TechHeader"></th></tr></thead>
+                <tbody class="text-slate-700">
+                    <tr><td class="p-4 border-b border-slate-200" data-translate-key="s11Cat1"></td><td class="p-4 border-b border-slate-200 font-medium">Kotlin</td></tr>
+                    <tr><td class="p-4 border-b border-slate-200" data-translate-key="s11Cat2"></td><td class="p-4 border-b border-slate-200 font-medium">Jetpack Compose</td></tr>
+                    <tr><td class="p-4 border-b border-slate-200" data-translate-key="s11Cat3"></td><td class="p-4 border-b border-slate-200 font-medium">Material Design</td></tr>
+                    <tr><td class="p-4 border-b border-slate-200" data-translate-key="s11Cat4"></td><td class="p-4 border-b border-slate-200 font-medium">SQLite</td></tr>
+                    <tr><td class="p-4 border-b border-slate-200">IDE</td><td class="p-4 border-b border-slate-200 font-medium">Android Studio</td></tr>
+                    <tr><td class="p-4" data-translate-key="s11Cat5"></td><td class="p-4 font-medium">Git</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="slide-12" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s12Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s12Subtitle"></p>
+            <div class="overflow-x-auto">
                 <table class="w-full text-lg border-collapse">
-                    <thead>
-                        <tr class="bg-slate-100">
-                            <th
-                                class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200"
-                                data-translate-key="s11CatHeader"
-                            ></th>
-                            <th
-                                class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200"
-                                data-translate-key="s11TechHeader"
-                            ></th>
-                        </tr>
-                    </thead>
+                    <thead><tr class="bg-slate-100"><th class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200" data-translate-key="s12HdrNo"></th><th class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200" data-translate-key="s12HdrFeature"></th><th class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200" data-translate-key="s12HdrResult"></th><th class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200" data-translate-key="s12HdrTime"></th></tr></thead>
                     <tbody class="text-slate-700">
-                        <tr>
-                            <td
-                                class="p-4 border-b border-slate-200"
-                                data-translate-key="s11Cat1"
-                            ></td>
-                            <td
-                                class="p-4 border-b border-slate-200 font-medium"
-                            >
-                                Kotlin
-                            </td>
-                        </tr>
-                        <tr>
-                            <td
-                                class="p-4 border-b border-slate-200"
-                                data-translate-key="s11Cat2"
-                            ></td>
-                            <td
-                                class="p-4 border-b border-slate-200 font-medium"
-                            >
-                                Jetpack Compose
-                            </td>
-                        </tr>
-                        <tr>
-                            <td
-                                class="p-4 border-b border-slate-200"
-                                data-translate-key="s11Cat3"
-                            ></td>
-                            <td
-                                class="p-4 border-b border-slate-200 font-medium"
-                            >
-                                Material Design
-                            </td>
-                        </tr>
-                        <tr>
-                            <td
-                                class="p-4 border-b border-slate-200"
-                                data-translate-key="s11Cat4"
-                            ></td>
-                            <td
-                                class="p-4 border-b border-slate-200 font-medium"
-                            >
-                                SQLite
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-4 border-b border-slate-200">IDE</td>
-                            <td
-                                class="p-4 border-b border-slate-200 font-medium"
-                            >
-                                Android Studio
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-4" data-translate-key="s11Cat5"></td>
-                            <td class="p-4 font-medium">Git</td>
-                        </tr>
+                        <tr><td class="p-4 border-b border-slate-200">1</td><td class="p-4 border-b border-slate-200" data-translate-key="s12F1"></td><td class="p-4 border-b border-slate-200 text-green-600 font-medium" data-translate-key="s12Success"></td><td class="p-4 border-b border-slate-200">600 ms</td></tr>
+                        <tr><td class="p-4 border-b border-slate-200">2</td><td class="p-4 border-b border-slate-200" data-translate-key="s12F2"></td><td class="p-4 border-b border-slate-200 text-green-600 font-medium" data-translate-key="s12Success"></td><td class="p-4 border-b border-slate-200">900 ms</td></tr>
+                        <tr><td class="p-4 border-b border-slate-200">3</td><td class="p-4 border-b border-slate-200" data-translate-key="s12F3"></td><td class="p-4 border-b border-slate-200 text-green-600 font-medium" data-translate-key="s12Success"></td><td class="p-4 border-b border-slate-200">304 ms</td></tr>
+                        <tr><td class="p-4 border-b border-slate-200">4</td><td class="p-4 border-b border-slate-200" data-translate-key="s12F4"></td><td class="p-4 border-b border-slate-200 text-green-600 font-medium" data-translate-key="s12Success"></td><td class="p-4 border-b border-slate-200">285 ms</td></tr>
+                        <tr><td class="p-4 border-b border-slate-200">5</td><td class="p-4 border-b border-slate-200" data-translate-key="s12F5"></td><td class="p-4 border-b border-slate-200 text-green-600 font-medium" data-translate-key="s12Success"></td><td class="p-4 border-b border-slate-200">60 ms</td></tr>
+                        <tr><td class="p-4">6</td><td class="p-4" data-translate-key="s12F6"></td><td class="p-4 text-green-600 font-medium" data-translate-key="s12Success"></td><td class="p-4" data-translate-key="s12Instant"></td></tr>
                     </tbody>
                 </table>
             </div>
-
-            <div
-                id="slide-12"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s12Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s12Subtitle"
-                ></p>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-lg border-collapse">
-                        <thead>
-                            <tr class="bg-slate-100">
-                                <th
-                                    class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200"
-                                    data-translate-key="s12HdrNo"
-                                ></th>
-                                <th
-                                    class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200"
-                                    data-translate-key="s12HdrFeature"
-                                ></th>
-                                <th
-                                    class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200"
-                                    data-translate-key="s12HdrResult"
-                                ></th>
-                                <th
-                                    class="p-4 text-left font-semibold text-slate-800 border-b-2 border-slate-200"
-                                    data-translate-key="s12HdrTime"
-                                ></th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-slate-700">
-                            <tr>
-                                <td class="p-4 border-b border-slate-200">1</td>
-                                <td
-                                    class="p-4 border-b border-slate-200"
-                                    data-translate-key="s12F1"
-                                ></td>
-                                <td
-                                    class="p-4 border-b border-slate-200 text-green-600 font-medium"
-                                    data-translate-key="s12Success"
-                                ></td>
-                                <td class="p-4 border-b border-slate-200">
-                                    600 ms
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 border-b border-slate-200">2</td>
-                                <td
-                                    class="p-4 border-b border-slate-200"
-                                    data-translate-key="s12F2"
-                                ></td>
-                                <td
-                                    class="p-4 border-b border-slate-200 text-green-600 font-medium"
-                                    data-translate-key="s12Success"
-                                ></td>
-                                <td class="p-4 border-b border-slate-200">
-                                    900 ms
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 border-b border-slate-200">3</td>
-                                <td
-                                    class="p-4 border-b border-slate-200"
-                                    data-translate-key="s12F3"
-                                ></td>
-                                <td
-                                    class="p-4 border-b border-slate-200 text-green-600 font-medium"
-                                    data-translate-key="s12Success"
-                                ></td>
-                                <td class="p-4 border-b border-slate-200">
-                                    304 ms
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 border-b border-slate-200">4</td>
-                                <td
-                                    class="p-4 border-b border-slate-200"
-                                    data-translate-key="s12F4"
-                                ></td>
-                                <td
-                                    class="p-4 border-b border-slate-200 text-green-600 font-medium"
-                                    data-translate-key="s12Success"
-                                ></td>
-                                <td class="p-4 border-b border-slate-200">
-                                    285 ms
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 border-b border-slate-200">5</td>
-                                <td
-                                    class="p-4 border-b border-slate-200"
-                                    data-translate-key="s12F5"
-                                ></td>
-                                <td
-                                    class="p-4 border-b border-slate-200 text-green-600 font-medium"
-                                    data-translate-key="s12Success"
-                                ></td>
-                                <td class="p-4 border-b border-slate-200">
-                                    60 ms
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4">6</td>
-                                <td class="p-4" data-translate-key="s12F6"></td>
-                                <td
-                                    class="p-4 text-green-600 font-medium"
-                                    data-translate-key="s12Success"
-                                ></td>
-                                <td
-                                    class="p-4"
-                                    data-translate-key="s12Instant"
-                                ></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Field Documentation Photos Gallery Card -->
-                    <div class="mt-10">
-                        <h3 class="text-xl font-semibold text-slate-800 mb-4" data-translate-key="s12PhotoGalleryTitle">Field Documentation Photos</h3>
-                        <div class="bg-slate-50 rounded-lg shadow p-6 border border-slate-200">
-                            <div
-                                x-data="{
-                                    photos: [
-                                        { src: 'assets/field-documentation/doc-1.jpeg', alt: 'Field Documentation 1', caption: 'Photo 1' },
-                                        { src: 'assets/field-documentation/doc-2.PNG', alt: 'Field Documentation 2', caption: 'Photo 2' },
-                                        { src: 'assets/field-documentation/doc-3.jpg', alt: 'Field Documentation 3', caption: 'Photo 3' },
-                                        { src: 'assets/field-documentation/doc-4.jpg', alt: 'Field Documentation 4', caption: 'Photo 4' },
-                                        { src: 'assets/field-documentation/doc-5.jpg', alt: 'Field Documentation 5', caption: 'Photo 5' },
-                                        { src: 'assets/field-documentation/doc-6.jpg', alt: 'Field Documentation 6', caption: 'Photo 6' },
-                                        { src: 'assets/field-documentation/doc-7.jpg', alt: 'Field Documentation 7', caption: 'Photo 7' }
-                                    ],
-                                    current: 0,
-                                    prev() { this.current = (this.current === 0) ? this.photos.length - 1 : this.current - 1 },
-                                    next() { this.current = (this.current === this.photos.length - 1) ? 0 : this.current + 1 }
-                                }"
-                                class="relative flex flex-col items-center"
-                            >
-                                <div class="w-full flex justify-center items-center">
-                                    <button @click="prev" class="absolute left-0 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition disabled:opacity-50" :disabled="photos.length <= 1">
-                                        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                                        </svg>
-                                    </button>
-                                    <img
-                                        :src="photos[current].src"
-                                        :alt="photos[current].alt"
-                                        class="w-full max-w-md object-contain rounded-lg border border-slate-200 transition-all duration-300"
-                                        @error="if ($event.target.src !== `https://placehold.co/600x1000?text=${encodeURIComponent(photos[current].alt)}`) { $event.target.src = `https://placehold.co/600x1000?text=${encodeURIComponent(photos[current].alt)}` }"
-                                    >
-                                    <button @click="next" class="absolute right-0 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition disabled:opacity-50" :disabled="photos.length <= 1">
-                                        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <span class="text-slate-600 text-sm mt-2" x-text="photos[current].caption"></span>
-                                <div class="flex gap-2 mt-4">
-                                    <template x-for="(photo, idx) in photos" :key="photo.src">
-                                        <button
-                                            class="w-3 h-3 rounded-full"
-                                            :class="{'bg-slate-700': idx === current, 'bg-slate-300': idx !== current}"
-                                            @click="current = idx"
-                                        ></button>
-                                    </template>
-                                </div>
-                            </div>
+            <div class="mt-10">
+                <h3 class="text-xl font-semibold text-slate-800 mb-4" data-translate-key="s12PhotoGalleryTitle">Field Documentation Photos</h3>
+                <div class="bg-slate-50 rounded-lg shadow p-6 border border-slate-200">
+                    <div x-data="{ photos: [ { src: 'assets/field-documentation/doc-1.jpeg', alt: 'Field Documentation 1', caption: 'Photo 1' }, { src: 'assets/field-documentation/doc-2.PNG', alt: 'Field Documentation 2', caption: 'Photo 2' }, { src: 'assets/field-documentation/doc-3.jpg', alt: 'Field Documentation 3', caption: 'Photo 3' }, { src: 'assets/field-documentation/doc-4.jpg', alt: 'Field Documentation 4', caption: 'Photo 4' }, { src: 'assets/field-documentation/doc-5.jpg', alt: 'Field Documentation 5', caption: 'Photo 5' }, { src: 'assets/field-documentation/doc-6.jpg', alt: 'Field Documentation 6', caption: 'Photo 6' }, { src: 'assets/field-documentation/doc-7.jpg', alt: 'Field Documentation 7', caption: 'Photo 7' } ], current: 0, prev() { this.current = (this.current === 0) ? this.photos.length - 1 : this.current - 1 }, next() { this.current = (this.current === this.photos.length - 1) ? 0 : this.current + 1 } }" class="relative flex flex-col items-center">
+                        <div class="w-full flex justify-center items-center">
+                            <button @click="prev" class="absolute left-0 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition disabled:opacity-50" :disabled="photos.length <= 1"><svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg></button>
+                            <img :src="photos[current].src" :alt="photos[current].alt" class="w-full max-w-md object-contain rounded-lg border border-slate-200 transition-all duration-300" @error="if ($event.target.src !== `https://placehold.co/600x1000?text=${encodeURIComponent(photos[current].alt)}`) { $event.target.src = `https://placehold.co/600x1000?text=${encodeURIComponent(photos[current].alt)}` }">
+                            <button @click="next" class="absolute right-0 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition disabled:opacity-50" :disabled="photos.length <= 1"><svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
+                        </div>
+                        <span class="text-slate-600 text-sm mt-2" x-text="photos[current].caption"></span>
+                        <div class="flex gap-2 mt-4">
+                            <template x-for="(photo, idx) in photos" :key="photo.src">
+                                <button class="w-3 h-3 rounded-full" :class="{'bg-slate-700': idx === current, 'bg-slate-300': idx !== current}" @click="current = idx"></button>
+                            </template>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div
-                id="slide-13"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s13Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s13Subtitle"
-                ></p>
-                <ul
-                    class="space-y-5 text-lg text-slate-700 list-disc list-inside"
-                >
-                    <li data-translate-key="s13Point1"></li>
-                    <li data-translate-key="s13Point2"></li>
-                    <li data-translate-key="s13Point3"></li>
-                    <li data-translate-key="s13Point4"></li>
-                </ul>
-            </div>
-
-            <div
-                id="slide-14"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200"
-            >
-                <h2
-                    class="text-3xl font-bold text-slate-800 mb-2"
-                    data-translate-key="s14Title"
-                ></h2>
-                <p
-                    class="text-lg text-slate-500 mb-8"
-                    data-translate-key="s14Subtitle"
-                ></p>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3
-                            class="text-xl font-semibold text-slate-800 mb-3"
-                            data-translate-key="s14Sec1Title"
-                        ></h3>
-                        <ul
-                            class="list-disc list-inside text-lg text-slate-700 space-y-2"
-                        >
-                            <li data-translate-key="s14Sec1Point1"></li>
-                            <li data-translate-key="s14Sec1Point2"></li>
-                            <li data-translate-key="s14Sec1Point3"></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3
-                            class="text-xl font-semibold text-slate-800 mb-3"
-                            data-translate-key="s14Sec2Title"
-                        ></h3>
-                        <ul
-                            class="list-disc list-inside text-lg text-slate-700 space-y-2"
-                        >
-                            <li data-translate-key="s14Sec2Point1"></li>
-                            <li data-translate-key="s14Sec2Point2"></li>
-                        </ul>
-                    </div>
+        </div>
+        <div id="slide-13" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s13Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s13Subtitle"></p>
+            <ul class="space-y-5 text-lg text-slate-700 list-disc list-inside">
+                <li data-translate-key="s13Point1"></li>
+                <li data-translate-key="s13Point2"></li>
+                <li data-translate-key="s13Point3"></li>
+                <li data-translate-key="s13Point4"></li>
+            </ul>
+        </div>
+        <div id="slide-14" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2" data-translate-key="s14Title"></h2>
+            <p class="text-lg text-slate-500 mb-8" data-translate-key="s14Subtitle"></p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-3" data-translate-key="s14Sec1Title"></h3>
+                    <ul class="list-disc list-inside text-lg text-slate-700 space-y-2"><li data-translate-key="s14Sec1Point1"></li><li data-translate-key="s14Sec1Point2"></li><li data-translate-key="s14Sec1Point3"></li></ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-3" data-translate-key="s14Sec2Title"></h3>
+                    <ul class="list-disc list-inside text-lg text-slate-700 space-y-2"><li data-translate-key="s14Sec2Point1"></li><li data-translate-key="s14Sec2Point2"></li></ul>
                 </div>
             </div>
-
-            <div
-                id="slide-15"
-                class="bg-white p-10 rounded-xl shadow-xl border border-slate-200 h-full flex flex-col items-center justify-center text-center"
-            >
-                <h2
-                    class="text-5xl font-bold text-slate-800 mb-4"
-                    data-translate-key="s15Title"
-                ></h2>
-                <div class="w-32 h-1.5 bg-indigo-600 rounded-full my-8"></div>
-                <p
-                    class="text-2xl text-slate-600"
-                    data-translate-key="s15Subtitle"
-                ></p>
-            </div>
         </div>
+        <div id="slide-15" class="bg-white p-10 rounded-xl shadow-xl border border-slate-200 h-full flex flex-col items-center justify-center text-center">
+            <h2 class="text-5xl font-bold text-slate-800 mb-4" data-translate-key="s15Title"></h2>
+            <div class="w-32 h-1.5 bg-indigo-600 rounded-full my-8"></div>
+            <p class="text-2xl text-slate-600" data-translate-key="s15Subtitle"></p>
+        </div>
+    </div>
 
-        <script>
-            const translations = {
-                en: {
-                    pageTitle: "Kiosk Presentation DPR RI - Muhammad Rusydy. M",
-                    presentationTitle: "KKP Presentation",
-                    presentationSubtitle: "DPR RI Kiosk",
-                    languageLabel: "Language",
-                    fullscreenLabel: "Fullscreen",
-                    exitFullscreenLabel: "Exit Fullscreen",
-                    navSlide1: "Slide 1: Title",
-                    navSlide2: "Slide 2: Background",
-                    navSlide3: "Slide 3: Problem",
-                    navSlide4: "Slide 4: Research Objectives",
-                    navSlide5: "Slide 5: RAD Method",
-                    navSlide6: "Slide 6: RAD Stages",
-                    navSlide7: "Slide 7: Solution",
-                    navSlide8: "Slide 8: Design & Architecture",
-                    navSlide9: "Slide 9: Interaction Flow",
-                    navSlide10: "Slide 10: UML Design",
-                    navSlide11: "Slide 11: Technology",
-                    navSlide12: "Slide 12: Test Results",
-                    navSlide13: "Slide 13: Conclusion",
-                    navSlide14: "Slide 14: Suggestions",
-                    navSlide15: "Slide 15: Thank You",
-                    s1Title:
-                        "Application of the Rapid Application Development (RAD) Method in Developing a Native Android-Based Application for the DPR RI Kiosk Machine",
-                    s1Major: "Undergraduate Program - Information Systems",
-                    s1Supervisor: "Supervisor",
-                    s2Title: "Background",
-                    s2Subtitle:
-                        "Context and urgency of the research in improving public services.",
-                    s2Point1:
-                        "The public's need for easily accessible information and public services is increasing in the digital era.",
-                    s2Point2:
-                        "DPR RI is innovating by utilizing Kiosk technology to improve accessibility and services to the community.",
-                    s2Point3:
-                        "Kiosk machines are placed in strategic locations to disseminate information on session schedules, bills, and profiles of DPR members.",
-                    s2Point4:
-                        "This research applies the Rapid Application Development (RAD) method, an approach that prioritizes speed and flexibility in software development.",
-                    s3Title: "Problem Identification",
-                    s3Subtitle:
-                        "Key challenges faced by the current Kiosk system.",
-                    s3Problem1Title: "Non-Real-Time Content Management",
-                    s3Problem1Desc:
-                        "Information presented on the Kiosk is often not updated with the latest changes, making the data less accurate.",
-                    s3Problem2Title: "Limited Access & Interaction",
-                    s3Problem2Desc:
-                        "The public still has limited access to complete information and minimal channels for direct interaction, such as submitting aspirations.",
-                    s3Problem3Title: "System Integration Challenges",
-                    s3Problem3Desc:
-                        "The Kiosk machine is difficult to integrate with other existing information systems at DPR RI (legislative system, CMS).",
-                    s4Title: "Research Objectives",
-                    s4Subtitle:
-                        "Goals to be achieved through the development of this application.",
-                    s4Point1:
-                        "Develop a Native Android-based Kiosk application capable of presenting legislative information in <strong>real-time</strong>.",
-                    s4Point2:
-                        "Improve information accessibility for the public through an <strong>intuitive and user-friendly</strong> interface.",
-                    s4Point3:
-                        "Implement the <strong>Rapid Application Development (RAD)</strong> method in a structured manner in the design and creation of the application.",
-                    s4Point4:
-                        "Facilitate public interaction with DPR RI through a feature for <strong>submitting aspirations and complaints</strong>.",
-                    s5Title: "Development Method: RAD",
-                    s5Subtitle:
-                        "A methodology that emphasizes speed and agility with iterative feedback cycles.",
-                    s6Title: "Rapid Application Development Stages",
-                    s6Subtitle: "The four main phases in the RAD methodology.",
-                    s6Point1:
-                        "<strong>Requirements Planning:</strong> Identifying general business and technical needs with stakeholders.",
-                    s6Point2:
-                        "<strong>User Design:</strong> An interactive phase where users and developers collaborate to design models and create initial functional prototypes.",
-                    s6Point3:
-                        "<strong>Construction:</strong> Rapid and iterative development with many revisions based on continuous feedback.",
-                    s6Point4:
-                        "<strong>Cutover:</strong> The final phase where the system is thoroughly tested, implemented, and replaces the old system.",
-                    s7Title: "Proposed Solution",
-                    s7Subtitle:
-                        "Technical approach to address the existing problems.",
-                    s7Sol1Title: "Real-Time Content Management",
-                    s7Sol1Desc:
-                        "Synchronization mechanism with data overwrite to ensure information is always updated.",
-                    s7Sol2Title: "Improved Accessibility",
-                    s7Sol2Desc:
-                        "Intuitive and engaging interface using Jetpack Compose & Material Design.",
-                    s7Sol3Title: "Public Interaction Channel",
-                    s7Sol3Desc:
-                        "Interactive feature for aspirations and complaints directly through the Kiosk.",
-                    s7Sol4Title: "System Integration",
-                    s7Sol4Desc:
-                        "Integration module to automatically retrieve data from the legislative system or CMS.",
-                    s8Title: "Application Navigation Structure",
-                    s8Subtitle:
-                        "The hierarchical flow used in the Kiosk application.",
-                    s9Title: "Actor Interaction Flow",
-                    s9Subtitle:
-                        "This diagram illustrates the main interaction flow for Administrators and Users.",
-                    s10Title: "UML Design - Activity & Class Diagram",
-                    s10ActivityTitle:
-                        "Activity Diagram (Example: Submitting Aspirations)",
-                    s10ActivityDesc:
-                        "Describes the workflow of a specific feature.",
-                    s10ClassTitle: "Class Diagram",
-                    s10ClassDesc:
-                        "Describes the class structure and relationships between classes in the system.",
-                    s10ClassList:
-                        "<strong>Main Classes:</strong> Admin, User, Content, Aspirasi, Pengaduan, Scheduler, Token, Layout, and Notification.",
-                    s11Title: "Technology Used",
-                    s11Subtitle:
-                        "Frameworks and tools that form the foundation of the application.",
-                    s11CatHeader: "Category",
-                    s11TechHeader: "Technology",
-                    s11Cat1: "Programming Language",
-                    s11Cat2: "UI Framework",
-                    s11Cat3: "UI Design",
-                    s11Cat4: "Local Database",
-                    s11Cat5: "Version Control",
-                    s12Title: "Test Results",
-                    s12Subtitle:
-                        "Performance and functionality metrics from application testing.",
-                    s12HdrNo: "No",
-                    s12HdrFeature: "Feature",
-                    s12HdrResult: "Result",
-                    s12HdrTime: "Response Time",
-                    s12F1: "Display Homepage",
-                    s12F2: "Display Content according to Scheduler",
-                    s12F3: "Display Bill List",
-                    s12F4: "Navigate to Homepage",
-                    s12F5: "Maintenance Mode",
-                    s12F6: "Set Update Interval",
-                    s12Success: "Success",
-                    s12Instant: "Instant",
-                    s13Title: "Conclusion",
-                    s13Subtitle:
-                        "Summary of the results from the research and application development.",
-                    s13Point1:
-                        "The application successfully overcomes information update delays with an efficient <strong>content synchronization</strong> system.",
-                    s13Point2:
-                        "The application has been successfully <strong>integrated</strong> with the legislative information system and internal content management of DPR RI.",
-                    s13Point3:
-                        "An <strong>intuitive and user-friendly</strong> interface design has been successfully implemented, facilitating access for various community groups.",
-                    s13Point4:
-                        "The application's performance has been optimized to run <strong>smoothly and responsively</strong> on the Kiosk machine's hardware.",
-                    s14Title: "Suggestions & Future Development",
-                    s14Subtitle:
-                        "Recommendations for future iterations and implementation.",
-                    s14Sec1Title: "Feature Development",
-                    s14Sec1Point1:
-                        "Add real-time notifications & advanced search.",
-                    s14Sec1Point2: "Conduct regular security audits.",
-                    s14Sec1Point3: "Routinely collect user feedback.",
-                    s14Sec2Title: "Implementation & Maintenance",
-                    s14Sec2Point1:
-                        "Conduct training and socialization for the public.",
-                    s14Sec2Point2:
-                        "Provide a responsive maintenance and technical support team.",
-                    s15Title: "Thank You",
-                    s15Subtitle: "Q&A Session",
+    <script>
+        // This small script adds the necessary HTMX attributes to the nav links. It runs once when the page loads.
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.setAttribute('class', 'block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors');
+            link.setAttribute('hx-get', '');
+            link.setAttribute('hx-select', link.getAttribute('href'));
+            link.setAttribute('hx-target', '#slide-content');
+            link.setAttribute('hx-swap', 'innerHTML');
+            link.setAttribute('hx-push-url', 'true');
+        });
+
+        // The main Alpine.js component that controls all page interactivity.
+        function app() {
+            return {
+                // 1. STATE PROPERTIES (The data that drives the UI)
+                currentLang: localStorage.getItem('language') || 'id',
+                activeSlide: window.location.hash || '#slide-1',
+                isFullscreen: document.fullscreenElement !== null,
+
+                // 2. METHODS (The actions that change the state)
+                init() {
+                    // This runs once when Alpine starts.
+                    this.applyTranslations();
+                    window.addEventListener('hashchange', () => { this.activeSlide = window.location.hash || '#slide-1'; });
+                    document.addEventListener('fullscreenchange', () => { this.isFullscreen = document.fullscreenElement !== null; });
+                    document.body.addEventListener('htmx:afterSwap', () => { this.applyTranslations(); });
                 },
-                id: {
-                    pageTitle: "Presentasi Kios DPR RI - Muhammad Rusydy. M",
-                    presentationTitle: "Presentasi KKP",
-                    presentationSubtitle: "Kiosk DPR RI",
-                    languageLabel: "Bahasa",
-                    fullscreenLabel: "Layar Penuh",
-                    exitFullscreenLabel: "Keluar Layar Penuh",
-                    navSlide1: "Slide 1: Judul",
-                    navSlide2: "Slide 2: Latar Belakang",
-                    navSlide3: "Slide 3: Permasalahan",
-                    navSlide4: "Slide 4: Tujuan Penelitian",
-                    navSlide5: "Slide 5: Metode RAD",
-                    navSlide6: "Slide 6: Tahapan RAD",
-                    navSlide7: "Slide 7: Solusi",
-                    navSlide8: "Slide 8: Desain & Arsitektur",
-                    navSlide9: "Slide 9: Alur Interaksi",
-                    navSlide10: "Slide 10: Perancangan UML",
-                    navSlide11: "Slide 11: Teknologi",
-                    navSlide12: "Slide 12: Hasil Pengujian",
-                    navSlide13: "Slide 13: Kesimpulan",
-                    navSlide14: "Slide 14: Saran",
-                    navSlide15: "Slide 15: Terima Kasih",
-                    s1Title:
-                        "Penerapan Metode Rapid Application Development (RAD) pada Pengembangan Aplikasi Berbasis Native Android untuk Mesin Kiosk DPR RI",
-                    s1Major: "Program Studi S1 - Sistem Informasi",
-                    s1Supervisor: "Pembimbing",
-                    s2Title: "Latar Belakang",
-                    s2Subtitle:
-                        "Konteks dan urgensi penelitian dalam meningkatkan layanan publik.",
-                    s2Point1:
-                        "Kebutuhan masyarakat akan informasi dan layanan publik yang mudah diakses semakin meningkat di era digital.",
-                    s2Point2:
-                        "DPR RI berinovasi dengan memanfaatkan teknologi Kiosk untuk meningkatkan aksesibilitas dan pelayanan kepada masyarakat.",
-                    s2Point3:
-                        "Mesin Kiosk ditempatkan di lokasi strategis untuk menyebarkan informasi jadwal sidang, RUU, dan profil anggota DPR.",
-                    s2Point4:
-                        "Penelitian ini menerapkan metode Rapid Application Development (RAD), sebuah pendekatan yang memprioritaskan kecepatan dan fleksibilitas dalam pengembangan perangkat lunak.",
-                    s3Title: "Identifikasi Permasalahan",
-                    s3Subtitle:
-                        "Tantangan utama yang dihadapi oleh sistem Kiosk saat ini.",
-                    s3Problem1Title: "Manajemen Konten Tidak Real-Time",
-                    s3Problem1Desc:
-                        "Informasi yang disajikan di Kiosk seringkali tidak terupdate sesuai perubahan terbaru, sehingga data menjadi kurang akurat.",
-                    s3Problem2Title: "Keterbatasan Akses & Interaksi",
-                    s3Problem2Desc:
-                        "Masyarakat masih memiliki akses terbatas terhadap informasi lengkap dan minimnya kanal untuk interaksi langsung seperti penyampaian aspirasi.",
-                    s3Problem3Title: "Tantangan Integrasi Sistem",
-                    s3Problem3Desc:
-                        "Mesin Kiosk sulit terintegrasi dengan sistem informasi lain yang ada di DPR RI (sistem legislatif, CMS).",
-                    s4Title: "Tujuan Penelitian",
-                    s4Subtitle:
-                        "Sasaran yang ingin dicapai melalui pengembangan aplikasi ini.",
-                    s4Point1:
-                        "Mengembangkan aplikasi Kiosk berbasis Native Android yang mampu menyajikan informasi legislatif secara <strong>real-time</strong>.",
-                    s4Point2:
-                        "Meningkatkan aksesibilitas informasi bagi masyarakat melalui antarmuka yang <strong>intuitif dan mudah digunakan</strong>.",
-                    s4Point3:
-                        "Mengimplementasikan metode <strong>Rapid Application Development (RAD)</strong> secara terstruktur dalam perancangan dan pembuatan aplikasi.",
-                    s4Point4:
-                        "Memfasilitasi interaksi masyarakat dengan DPR RI melalui fitur <strong>penyampaian aspirasi dan pengaduan</strong>.",
-                    s5Title: "Metode Pengembangan: RAD",
-                    s5Subtitle:
-                        "Metodologi yang menekankan kecepatan dan kelincahan dengan siklus umpan balik iteratif.",
-                    s6Title: "Tahapan Rapid Application Development",
-                    s6Subtitle: "Empat fase utama dalam metodologi RAD.",
-                    s6Point1:
-                        "<strong>Requirements Planning (Perencanaan Kebutuhan):</strong> Mengidentifikasi kebutuhan bisnis dan teknis secara umum bersama para pemangku kepentingan.",
-                    s6Point2:
-                        "<strong>User Design (Desain Pengguna):</strong> Fase interaktif di mana pengguna dan pengembang bekerja sama mendesain model dan membuat prototipe fungsional awal.",
-                    s6Point3:
-                        "<strong>Construction (Konstruksi):</strong> Pengembangan cepat dan iteratif dengan banyak revisi berdasarkan umpan balik berkelanjutan.",
-                    s6Point4:
-                        "<strong>Cutover (Implementasi):</strong> Fase akhir di mana sistem diuji secara menyeluruh, diimplementasikan, dan menggantikan sistem lama.",
-                    s7Title: "Solusi yang Diusulkan",
-                    s7Subtitle:
-                        "Pendekatan teknis untuk menjawab permasalahan yang ada.",
-                    s7Sol1Title: "Manajemen Konten Real-Time",
-                    s7Sol1Desc:
-                        "Mekanisme sinkronisasi dengan overwrite data untuk memastikan info selalu terupdate.",
-                    s7Sol2Title: "Peningkatan Aksesibilitas",
-                    s7Sol2Desc:
-                        "Antarmuka intuitif dan menarik menggunakan Jetpack Compose & Material Design.",
-                    s7Sol3Title: "Kanal Interaksi Masyarakat",
-                    s7Sol3Desc:
-                        "Fitur interaktif untuk aspirasi dan pengaduan langsung melalui Kiosk.",
-                    s7Sol4Title: "Integrasi Sistem",
-                    s7Sol4Desc:
-                        "Modul integrasi untuk mengambil data otomatis dari sistem legislatif atau CMS.",
-                    s8Title: "Struktur Navigasi Aplikasi",
-                    s8Subtitle:
-                        "Alur hierarkis yang digunakan dalam aplikasi Kiosk.",
-                    s9Title: "Alur Interaksi Aktor",
-                    s9Subtitle:
-                        "Diagram ini menggambarkan alur interaksi utama untuk Administrator dan Pengguna.",
-                    s10Title: "Perancangan UML - Activity & Class Diagram",
-                    s10ActivityTitle:
-                        "Activity Diagram (Contoh: Menyampaikan Aspirasi)",
-                    s10ActivityDesc: "Menggambarkan alur kerja sebuah fitur.",
-                    s10ClassTitle: "Class Diagram",
-                    s10ClassDesc:
-                        "Menggambarkan struktur kelas dan hubungan antar kelas dalam sistem.",
-                    s10ClassList:
-                        "<strong>Kelas Utama:</strong> Admin, User, Content, Aspirasi, Pengaduan, Scheduler, Token, Layout, dan Notification.",
-                    s11Title: "Teknologi yang Digunakan",
-                    s11Subtitle:
-                        "Framework dan perangkat yang menjadi fondasi aplikasi.",
-                    s11CatHeader: "Kategori",
-                    s11TechHeader: "Teknologi",
-                    s11Cat1: "Bahasa Pemrograman",
-                    s11Cat2: "Framework UI",
-                    s11Cat3: "Desain UI",
-                    s11Cat4: "Database Lokal",
-                    s11Cat5: "Version Control",
-                    s12Title: "Hasil Pengujian",
-                    s12Subtitle:
-                        "Metrik performa dan fungsionalitas dari pengujian aplikasi.",
-                    s12HdrNo: "No",
-                    s12HdrFeature: "Fitur",
-                    s12HdrResult: "Hasil",
-                    s12HdrTime: "Waktu Respon",
-                    s12F1: "Menampilkan Beranda",
-                    s12F2: "Menampilkan Konten sesuai Scheduler",
-                    s12F3: "Menampilkan Daftar RUU",
-                    s12F4: "Navigasi ke Beranda",
-                    s12F5: "Mode Maintenance",
-                    s12F6: "Pengaturan Interval Update",
-                    s12Success: "Sukses",
-                    s12Instant: "Instan",
-                    s13Title: "Kesimpulan",
-                    s13Subtitle:
-                        "Rangkuman hasil dari penelitian dan pengembangan aplikasi.",
-                    s13Point1:
-                        "Aplikasi berhasil mengatasi keterlambatan pembaruan informasi dengan sistem <strong>sinkronisasi konten</strong> yang efisien.",
-                    s13Point2:
-                        "Aplikasi berhasil <strong>diintegrasikan</strong> dengan baik dengan sistem informasi legislatif dan manajemen konten internal DPR RI.",
-                    s13Point3:
-                        "Desain antarmuka yang <strong>intuitif dan ramah pengguna</strong> berhasil diterapkan, memudahkan akses bagi berbagai kalangan masyarakat.",
-                    s13Point4:
-                        "Kinerja aplikasi telah dioptimalkan untuk berjalan <strong>lancar dan responsif</strong> pada perangkat keras mesin Kiosk.",
-                    s14Title: "Saran & Pengembangan Lanjutan",
-                    s14Subtitle:
-                        "Rekomendasi untuk iterasi dan implementasi di masa depan.",
-                    s14Sec1Title: "Pengembangan Fitur",
-                    s14Sec1Point1:
-                        "Menambahkan notifikasi real-time & pencarian canggih.",
-                    s14Sec1Point2: "Melakukan audit keamanan secara berkala.",
-                    s14Sec1Point3:
-                        "Mengumpulkan umpan balik pengguna secara rutin.",
-                    s14Sec2Title: "Implementasi & Pemeliharaan",
-                    s14Sec2Point1:
-                        "Melakukan pelatihan dan sosialisasi kepada masyarakat.",
-                    s14Sec2Point2:
-                        "Menyediakan tim pemeliharaan dan dukungan teknis yang responsif.",
-                    s15Title: "Terima Kasih",
-                    s15Subtitle: "Sesi Tanya Jawab",
+
+                setLanguage(lang) {
+                    this.currentLang = lang;
+                    localStorage.setItem('language', lang);
+                    document.documentElement.lang = lang;
+                    this.applyTranslations();
                 },
-                ja: {
-                    pageTitle:
-                        "DPR RI キオスクプレゼンテーション - Muhammad Rusydy. M",
-                    presentationTitle: "KKP プレゼンテーション",
-                    presentationSubtitle: "DPR RI キオスク",
-                    languageLabel: "言語",
-                    fullscreenLabel: "フルスクリーン",
-                    exitFullscreenLabel: "フルスクリーンを終了",
-                    navSlide1: "スライド1：タイトル",
-                    navSlide2: "スライド2：背景",
-                    navSlide3: "スライド3：問題点",
-                    navSlide4: "スライド4：研究目的",
-                    navSlide5: "スライド5：RAD手法",
-                    navSlide6: "スライド6：RADの段階",
-                    navSlide7: "スライド7：解決策",
-                    navSlide8: "スライド8：設計とアーキテクチャ",
-                    navSlide9: "スライド9：インタラクションフロー",
-                    navSlide10: "スライド10：UML設計",
-                    navSlide11: "スライド11：技術",
-                    navSlide12: "スライド12：テスト結果",
-                    navSlide13: "スライド13：結論",
-                    navSlide14: "スライド14：提案",
-                    navSlide15: "スライド15：ありがとうございました",
-                    s1Title:
-                        "DPR RIキオスクマシン向けネイティブAndroidベースアプリケーション開発における迅速アプリケーション開発（RAD）手法の適用",
-                    s1Major: "学部課程 - 情報システム",
-                    s1Supervisor: "指導教員",
-                    s2Title: "背景",
-                    s2Subtitle: "公共サービス向上における研究の文脈と緊急性。",
-                    s2Point1:
-                        "デジタル時代において、簡単にアクセスできる情報や公共サービスに対する国民のニーズは高まっています。",
-                    s2Point2:
-                        "DPR RIはキオスク技術を活用して、地域社会へのアクセシビリティとサービスを向上させる革新を進めています。",
-                    s2Point3:
-                        "キオスクマシンは、会期スケジュール、法案、DPR議員のプロフィールなどの情報を発信するために戦略的な場所に設置されています。",
-                    s2Point4:
-                        "本研究では、ソフトウェア開発におけるスピードと柔軟性を優先するアプローチである迅速アプリケーション開発（RAD）手法を適用します。",
-                    s3Title: "問題点の特定",
-                    s3Subtitle:
-                        "現在のキオスクシステムが直面している主な課題。",
-                    s3Problem1Title: "リアルタイムではないコンテンツ管理",
-                    s3Problem1Desc:
-                        "キオスクに表示される情報は最新の変更で更新されないことが多く、データの正確性が低下しています。",
-                    s3Problem2Title: "限定的なアクセスとインタラクション",
-                    s3Problem2Desc:
-                        "国民は依然として完全な情報へのアクセスが制限されており、意見提出などの直接的な対話チャネルが最小限です。",
-                    s3Problem3Title: "システム統合の課題",
-                    s3Problem3Desc:
-                        "キオスクマシンは、DPR RIの他の既存の情報システム（立法システム、CMS）との統合が困難です。",
-                    s4Title: "研究目的",
-                    s4Subtitle:
-                        "このアプリケーション開発を通じて達成すべき目標。",
-                    s4Point1:
-                        "立法情報を<strong>リアルタイム</strong>で表示できるネイティブAndroidベースのキオスクアプリケーションを開発する。",
-                    s4Point2:
-                        "<strong>直感的で使いやすい</strong>インターフェースを通じて、国民の情報アクセシビリティを向上させる。",
-                    s4Point3:
-                        "アプリケーションの設計と作成において、<strong>迅速アプリケーション開発（RAD）</strong>手法を構造的に実装する。",
-                    s4Point4:
-                        "<strong>意見や苦情の提出</strong>機能を通じて、国民とDPR RIとの対話を促進する。",
-                    s5Title: "開発手法：RAD",
-                    s5Subtitle:
-                        "反復的なフィードバックサイクルでスピードと俊敏性を重視する方法論。",
-                    s6Title: "迅速アプリケーション開発の段階",
-                    s6Subtitle: "RAD方法論における4つの主要なフェーズ。",
-                    s6Point1:
-                        "<strong>要件計画：</strong>利害関係者と共に、一般的なビジネスおよび技術的ニーズを特定します。",
-                    s6Point2:
-                        "<strong>ユーザー設計：</strong>ユーザーと開発者が協力してモデルを設計し、初期の機能的なプロトタイプを作成する対話的なフェーズ。",
-                    s6Point3:
-                        "<strong>構築：</strong>継続的なフィードバックに基づいて多くの修正を伴う迅速かつ反復的な開発。",
-                    s6Point4:
-                        "<strong>カットオーバー：</strong>システムが徹底的にテストされ、実装され、古いシステムを置き換える最終フェーズ。",
-                    s7Title: "提案された解決策",
-                    s7Subtitle: "既存の問題に対処するための技術的アプローチ。",
-                    s7Sol1Title: "リアルタイムコンテンツ管理",
-                    s7Sol1Desc:
-                        "情報が常に更新されるように、データ上書きによる同期メカニズム。",
-                    s7Sol2Title: "アクセシビリティの向上",
-                    s7Sol2Desc:
-                        "Jetpack Composeとマテリアルデザインを使用した直感的で魅力的なインターフェース。",
-                    s7Sol3Title: "国民対話チャネル",
-                    s7Sol3Desc:
-                        "キオスクを通じて直接意見や苦情を申し立てるための対話機能。",
-                    s7Sol4Title: "システム統合",
-                    s7Sol4Desc:
-                        "立法システムやCMSからデータを自動的に取得するための統合モジュール。",
-                    s8Title: "アプリケーションナビゲーション構造",
-                    s8Subtitle:
-                        "キオスクアプリケーションで使用される階層的なフロー。",
-                    s9Title: "アクターインタラクションフロー",
-                    s9Subtitle:
-                        "この図は、管理者とユーザーの主な対話フローを示しています。",
-                    s10Title: "UML設計 - アクティビティ図とクラス図",
-                    s10ActivityTitle: "アクティビティ図（例：意見の提出）",
-                    s10ActivityDesc: "特定の機能のワークフローを記述します。",
-                    s10ClassTitle: "クラス図",
-                    s10ClassDesc:
-                        "システム内のクラス構造とクラス間の関係を記述します。",
-                    s10ClassList:
-                        "<strong>主なクラス：</strong> Admin、User、Content、Aspirasi、Pengaduan、Scheduler、Token、Layout、およびNotification。",
-                    s11Title: "使用技術",
-                    s11Subtitle:
-                        "アプリケーションの基盤となるフレームワークとツール。",
-                    s11CatHeader: "カテゴリ",
-                    s11TechHeader: "技術",
-                    s11Cat1: "プログラミング言語",
-                    s11Cat2: "UIフレームワーク",
-                    s11Cat3: "UIデザイン",
-                    s11Cat4: "ローカルデータベース",
-                    s11Cat5: "バージョン管理",
-                    s12Title: "テスト結果",
-                    s12Subtitle:
-                        "アプリケーションテストからのパフォーマンスと機能性のメトリクス。",
-                    s12HdrNo: "番号",
-                    s12HdrFeature: "機能",
-                    s12HdrResult: "結果",
-                    s12HdrTime: "応答時間",
-                    s12F1: "ホームページの表示",
-                    s12F2: "スケジューラに従ってコンテンツを表示",
-                    s12F3: "法案リストの表示",
-                    s12F4: "ホームページへのナビゲーション",
-                    s12F5: "メンテナンスモード",
-                    s12F6: "更新間隔の設定",
-                    s12Success: "成功",
-                    s12Instant: "即時",
-                    s13Title: "結論",
-                    s13Subtitle: "研究とアプリケーション開発の結果の要約。",
-                    s13Point1:
-                        "効率的な<strong>コンテンツ同期</strong>システムにより、アプリケーションは情報の更新遅延を正常に克服しました。",
-                    s13Point2:
-                        "アプリケーションは、DPR RIの立法情報システムおよび内部コンテンツ管理と正常に<strong>統合</strong>されました。",
-                    s13Point3:
-                        "<strong>直感的で使いやすい</strong>インターフェース設計が正常に実装され、さまざまなコミュニティグループのアクセスが容易になりました。",
-                    s13Point4:
-                        "アプリケーションのパフォーマンスは、キオスクマシンのハードウェア上で<strong>スムーズかつ応答性よく</strong>動作するように最適化されています。",
-                    s14Title: "提案と今後の開発",
-                    s14Subtitle: "将来のイテレーションと実装のための推奨事項。",
-                    s14Sec1Title: "機能開発",
-                    s14Sec1Point1: "リアルタイム通知と高度な検索を追加する。",
-                    s14Sec1Point2: "定期的なセキュリティ監査を実施する。",
-                    s14Sec1Point3:
-                        "定期的にユーザーのフィードバックを収集する。",
-                    s14Sec2Title: "実装とメンテナンス",
-                    s14Sec2Point1: "国民向けのトレーニングと社会化を実施する。",
-                    s14Sec2Point2:
-                        "応答性の高いメンテナンスおよび技術サポートチームを提供する。",
-                    s15Title: "ありがとうございました",
-                    s15Subtitle: "質疑応答",
-                },
-            };
 
-            function changeLanguage(lang) {
-                localStorage.setItem("language", lang);
-                document.documentElement.lang = lang;
-
-                const contentSource = document.querySelector(".hidden");
-
-                // Translate static elements visible on the page
-                document
-                    .querySelectorAll("[data-translate-key]")
-                    .forEach((element) => {
-                        const key = element.getAttribute("data-translate-key");
-                        if (translations[lang][key]) {
-                            // Use innerHTML to support bold tags
-                            element.innerHTML = translations[lang][key];
+                applyTranslations() {
+                    // This single function now handles all text updates.
+                    const langData = this.translations[this.currentLang];
+                    document.querySelectorAll('[data-translate-key]').forEach(el => {
+                        const key = el.getAttribute('data-translate-key');
+                        if (langData[key]) {
+                            el.innerHTML = langData[key];
                         }
                     });
+                },
 
-                // Translate all hidden slide content
-                contentSource
-                    .querySelectorAll("[data-translate-key]")
-                    .forEach((element) => {
-                        const key = element.getAttribute("data-translate-key");
-                        if (translations[lang][key]) {
-                            element.innerHTML = translations[lang][key];
+                toggleFullscreen() {
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                },
+
+                downloadPDF() {
+                    // Create a temporary container that will hold all the slides for the PDF.
+                    const container = document.createElement('div');
+
+                    // Loop through all 15 slide IDs.
+                    for (let i = 1; i <= 15; i++) {
+                        const slideElement = document.getElementById(`slide-${i}`);
+                        if (slideElement) {
+                            // Clone the slide to avoid modifying the original hidden element.
+                            const clone = slideElement.cloneNode(true);
+
+                            // This is the key fix: For every slide after the first one,
+                            // add a style that forces a new page in the PDF.
+                            if (i > 1) {
+                                clone.style.pageBreakBefore = 'always';
+                            }
+
+                            container.appendChild(clone);
                         }
-                    });
+                    }
 
-                // Update active state for language buttons
-                document.querySelectorAll(".lang-btn").forEach((btn) => {
-                    btn.classList.toggle(
-                        "active",
-                        btn.textContent.trim().toLowerCase() === lang,
-                    );
-                });
-            }
+                    // Set the options for the PDF generation.
+                    const options = {
+                        margin:       0.5,
+                        filename:     'DPR-RI-Kiosk-Presentation.pdf',
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2, useCORS: true },
+                        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+                    };
 
-            function setActiveLink() {
-                const hash = window.location.hash || "#slide-1";
-                document.querySelectorAll("#nav-links a").forEach((link) => {
-                    link.classList.toggle(
-                        "active-slide",
-                        link.getAttribute("href") === hash,
-                    );
-                });
-            }
+                    // Generate and save the PDF from the container with all the slides.
+                    html2pdf().set(options).from(container).save();
+                },
 
-            function initializeApp() {
-                setActiveLink();
-                const savedLang = localStorage.getItem("language") || "id";
-                changeLanguage(savedLang);
-            }
-
-            // Run when the page is loaded
-            document.addEventListener("DOMContentLoaded", initializeApp);
-
-            // Listen for URL hash changes to update the active slide
-            window.addEventListener("hashchange", setActiveLink);
-
-            // Run after HTMX swaps content to re-apply translations
-            document.body.addEventListener("htmx:afterSwap", (event) => {
-                // Re-apply translation to the newly swapped content
-                const savedLang = localStorage.getItem("language") || "id";
-                const translatableElements =
-                    event.detail.target.querySelectorAll(
-                        "[data-translate-key]",
-                    );
-
-                // Check if the swapped element itself has a translate key
-                if (event.detail.target.hasAttribute("data-translate-key")) {
-                    const key =
-                        event.detail.target.getAttribute("data-translate-key");
-                    if (translations[savedLang][key]) {
-                        event.detail.target.innerHTML =
-                            translations[savedLang][key];
+                // 3. DATA (The content, like translations)
+                translations: {
+                    en: {
+                        pageTitle: "Kiosk Presentation DPR RI - Muhammad Rusydy. M", presentationTitle: "KKP Presentation", presentationSubtitle: "DPR RI Kiosk", languageLabel: "Language", fullscreenLabel: "Fullscreen", exitFullscreenLabel: "Exit Fullscreen", exportLabel: "Export", navSlide1: "Slide 1: Title", navSlide2: "Slide 2: Background", navSlide3: "Slide 3: Problem", navSlide4: "Slide 4: Research Objectives", navSlide5: "Slide 5: RAD Method", navSlide6: "Slide 6: RAD Stages", navSlide7: "Slide 7: Solution", navSlide8: "Slide 8: Design & Architecture", navSlide9: "Slide 9: Interaction Flow", navSlide10: "Slide 10: UML Design", navSlide11: "Slide 11: Technology", navSlide12: "Slide 12: Test Results", navSlide13: "Slide 13: Conclusion", navSlide14: "Slide 14: Suggestions", navSlide15: "Slide 15: Thank You", s1Title: "Application of the Rapid Application Development (RAD) Method in Developing a Native Android-Based Application for the DPR RI Kiosk Machine", s1Major: "Undergraduate Program - Information Systems", s1Supervisor: "Supervisor", s2Title: "Background", s2Subtitle: "Context and urgency of the research in improving public services.", s2Point1: "The public's need for easily accessible information and public services is increasing in the digital era.", s2Point2: "DPR RI is innovating by utilizing Kiosk technology to improve accessibility and services to the community.", s2Point3: "Kiosk machines are placed in strategic locations to disseminate information on session schedules, bills, and profiles of DPR members.", s2Point4: "This research applies the Rapid Application Development (RAD) method, an approach that prioritizes speed and flexibility in software development.", s3Title: "Problem Identification", s3Subtitle: "Key challenges faced by the current Kiosk system.", s3Problem1Title: "Non-Real-Time Content Management", s3Problem1Desc: "Information presented on the Kiosk is often not updated with the latest changes, making the data less accurate.", s3Problem2Title: "Limited Access & Interaction", s3Problem2Desc: "The public still has limited access to complete information and minimal channels for direct interaction, such as submitting aspirations.", s3Problem3Title: "System Integration Challenges", s3Problem3Desc: "The Kiosk machine is difficult to integrate with other existing information systems at DPR RI (legislative system, CMS).", s4Title: "Research Objectives", s4Subtitle: "Goals to be achieved through the development of this application.", s4Point1: "Develop a Native Android-based Kiosk application capable of presenting legislative information in <strong>real-time</strong>.", s4Point2: "Improve information accessibility for the public through an <strong>intuitive and user-friendly</strong> interface.", s4Point3: "Implement the <strong>Rapid Application Development (RAD)</strong> method in a structured manner in the design and creation of the application.", s4Point4: "Facilitate public interaction with DPR RI through a feature for <strong>submitting aspirations and complaints</strong>.", s5Title: "Development Method: RAD", s5Subtitle: "A methodology that emphasizes speed and agility with iterative feedback cycles.", s6Title: "Rapid Application Development Stages", s6Subtitle: "The four main phases in the RAD methodology.", s6Point1: "<strong>Requirements Planning:</strong> Identifying general business and technical needs with stakeholders.", s6Point2: "<strong>User Design:</strong> An interactive phase where users and developers collaborate to design models and create initial functional prototypes.", s6Point3: "<strong>Construction:</strong> Rapid and iterative development with many revisions based on continuous feedback.", s6Point4: "<strong>Cutover:</strong> The final phase where the system is thoroughly tested, implemented, and replaces the old system.", s7Title: "Proposed Solution", s7Subtitle: "Technical approach to address the existing problems.", s7Sol1Title: "Real-Time Content Management", s7Sol1Desc: "Synchronization mechanism with data overwrite to ensure information is always updated.", s7Sol2Title: "Improved Accessibility", s7Sol2Desc: "Intuitive and engaging interface using Jetpack Compose & Material Design.", s7Sol3Title: "Public Interaction Channel", s7Sol3Desc: "Interactive feature for aspirations and complaints directly through the Kiosk.", s7Sol4Title: "System Integration", s7Sol4Desc: "Integration module to automatically retrieve data from the legislative system or CMS.", s8Title: "Application Navigation Structure", s8Subtitle: "The hierarchical flow used in the Kiosk application.", s9Title: "Actor Interaction Flow", s9Subtitle: "This diagram illustrates the main interaction flow for Administrators and Users.", s10Title: "UML Design - Activity & Class Diagram", s10ActivityTitle: "Activity Diagram (Example: Submitting Aspirations)", s10ActivityDesc: "Describes the workflow of a specific feature.", s10ClassTitle: "Class Diagram", s10ClassDesc: "Describes the class structure and relationships between classes in the system.", s10ClassList: "<strong>Main Classes:</strong> Admin, User, Content, Aspirasi, Pengaduan, Scheduler, Token, Layout, and Notification.", s11Title: "Technology Used", s11Subtitle: "Frameworks and tools that form the foundation of the application.", s11CatHeader: "Category", s11TechHeader: "Technology", s11Cat1: "Programming Language", s11Cat2: "UI Framework", s11Cat3: "UI Design", s11Cat4: "Local Database", s11Cat5: "Version Control", s12Title: "Test Results", s12Subtitle: "Performance and functionality metrics from application testing.", s12HdrNo: "No", s12HdrFeature: "Feature", s12HdrResult: "Result", s12HdrTime: "Response Time", s12F1: "Display Homepage", s12F2: "Display Content according to Scheduler", s12F3: "Display Bill List", s12F4: "Navigate to Homepage", s12F5: "Maintenance Mode", s12F6: "Set Update Interval", s12Success: "Success", s12Instant: "Instant", s12PhotoGalleryTitle: "Field Documentation Photos", s13Title: "Conclusion", s13Subtitle: "Summary of the results from the research and application development.", s13Point1: "The application successfully overcomes information update delays with an efficient <strong>content synchronization</strong> system.", s13Point2: "The application has been successfully <strong>integrated</strong> with the legislative information system and internal content management of DPR RI.", s13Point3: "An <strong>intuitive and user-friendly</strong> interface design has been successfully implemented, facilitating access for various community groups.", s13Point4: "The application's performance has been optimized to run <strong>smoothly and responsively</strong> on the Kiosk machine's hardware.", s14Title: "Suggestions & Future Development", s14Subtitle: "Recommendations for future iterations and implementation.", s14Sec1Title: "Feature Development", s14Sec1Point1: "Add real-time notifications & advanced search.", s14Sec1Point2: "Conduct regular security audits.", s14Sec1Point3: "Routinely collect user feedback.", s14Sec2Title: "Implementation & Maintenance", s14Sec2Point1: "Conduct training and socialization for the public.", s14Sec2Point2: "Provide a responsive maintenance and technical support team.", s15Title: "Thank You", s15Subtitle: "Q&A Session",
+                    },
+                    id: {
+                        pageTitle: "Presentasi Kios DPR RI - Muhammad Rusydy. M", presentationTitle: "Presentasi KKP", presentationSubtitle: "Kiosk DPR RI", languageLabel: "Bahasa", fullscreenLabel: "Layar Penuh", exitFullscreenLabel: "Keluar Layar Penuh", exportLabel: "Ekspor", navSlide1: "Slide 1: Judul", navSlide2: "Slide 2: Latar Belakang", navSlide3: "Slide 3: Permasalahan", navSlide4: "Slide 4: Tujuan Penelitian", navSlide5: "Slide 5: Metode RAD", navSlide6: "Slide 6: Tahapan RAD", navSlide7: "Slide 7: Solusi", navSlide8: "Slide 8: Desain & Arsitektur", navSlide9: "Slide 9: Alur Interaksi", navSlide10: "Slide 10: Perancangan UML", navSlide11: "Slide 11: Teknologi", navSlide12: "Slide 12: Hasil Pengujian", navSlide13: "Slide 13: Kesimpulan", navSlide14: "Slide 14: Saran", navSlide15: "Slide 15: Terima Kasih", s1Title: "Penerapan Metode Rapid Application Development (RAD) pada Pengembangan Aplikasi Berbasis Native Android untuk Mesin Kiosk DPR RI", s1Major: "Program Studi S1 - Sistem Informasi", s1Supervisor: "Pembimbing", s2Title: "Latar Belakang", s2Subtitle: "Konteks dan urgensi penelitian dalam meningkatkan layanan publik.", s2Point1: "Kebutuhan masyarakat akan informasi dan layanan publik yang mudah diakses semakin meningkat di era digital.", s2Point2: "DPR RI berinovasi dengan memanfaatkan teknologi Kiosk untuk meningkatkan aksesibilitas dan pelayanan kepada masyarakat.", s2Point3: "Mesin Kiosk ditempatkan di lokasi strategis untuk menyebarkan informasi jadwal sidang, RUU, dan profil anggota DPR.", s2Point4: "Penelitian ini menerapkan metode Rapid Application Development (RAD), sebuah pendekatan yang memprioritaskan kecepatan dan fleksibilitas dalam pengembangan perangkat lunak.", s3Title: "Identifikasi Permasalahan", s3Subtitle: "Tantangan utama yang dihadapi oleh sistem Kiosk saat ini.", s3Problem1Title: "Manajemen Konten Tidak Real-Time", s3Problem1Desc: "Informasi yang disajikan di Kiosk seringkali tidak terupdate sesuai perubahan terbaru, sehingga data menjadi kurang akurat.", s3Problem2Title: "Keterbatasan Akses & Interaksi", s3Problem2Desc: "Masyarakat masih memiliki akses terbatas terhadap informasi lengkap dan minimnya kanal untuk interaksi langsung seperti penyampaian aspirasi.", s3Problem3Title: "Tantangan Integrasi Sistem", s3Problem3Desc: "Mesin Kiosk sulit terintegrasi dengan sistem informasi lain yang ada di DPR RI (sistem legislatif, CMS).", s4Title: "Tujuan Penelitian", s4Subtitle: "Sasaran yang ingin dicapai melalui pengembangan aplikasi ini.", s4Point1: "Mengembangkan aplikasi Kiosk berbasis Native Android yang mampu menyajikan informasi legislatif secara <strong>real-time</strong>.", s4Point2: "Meningkatkan aksesibilitas informasi bagi masyarakat melalui antarmuka yang <strong>intuitif dan mudah digunakan</strong>.", s4Point3: "Mengimplementasikan metode <strong>Rapid Application Development (RAD)</strong> secara terstruktur dalam perancangan dan pembuatan aplikasi.", s4Point4: "Memfasilitasi interaksi masyarakat dengan DPR RI melalui fitur <strong>penyampaian aspirasi dan pengaduan</strong>.", s5Title: "Metode Pengembangan: RAD", s5Subtitle: "Metodologi yang menekankan kecepatan dan kelincahan dengan siklus umpan balik iteratif.", s6Title: "Tahapan Rapid Application Development", s6Subtitle: "Empat fase utama dalam metodologi RAD.", s6Point1: "<strong>Requirements Planning (Perencanaan Kebutuhan):</strong> Mengidentifikasi kebutuhan bisnis dan teknis secara umum bersama para pemangku kepentingan.", s6Point2: "<strong>User Design (Desain Pengguna):</strong> Fase interaktif di mana pengguna dan pengembang bekerja sama mendesain model dan membuat prototipe fungsional awal.", s6Point3: "<strong>Construction (Konstruksi):</strong> Pengembangan cepat dan iteratif dengan banyak revisi berdasarkan umpan balik berkelanjutan.", s6Point4: "<strong>Cutover (Implementasi):</strong> Fase akhir di mana sistem diuji secara menyeluruh, diimplementasikan, dan menggantikan sistem lama.", s7Title: "Solusi yang Diusulkan", s7Subtitle: "Pendekatan teknis untuk menjawab permasalahan yang ada.", s7Sol1Title: "Manajemen Konten Real-Time", s7Sol1Desc: "Mekanisme sinkronisasi dengan overwrite data untuk memastikan info selalu terupdate.", s7Sol2Title: "Peningkatan Aksesibilitas", s7Sol2Desc: "Antarmuka intuitif dan menarik menggunakan Jetpack Compose & Material Design.", s7Sol3Title: "Kanal Interaksi Masyarakat", s7Sol3Desc: "Fitur interaktif untuk aspirasi dan pengaduan langsung melalui Kiosk.", s7Sol4Title: "Integrasi Sistem", s7Sol4Desc: "Modul integrasi untuk mengambil data otomatis dari sistem legislatif atau CMS.", s8Title: "Struktur Navigasi Aplikasi", s8Subtitle: "Alur hierarkis yang digunakan dalam aplikasi Kiosk.", s9Title: "Alur Interaksi Aktor", s9Subtitle: "Diagram ini menggambarkan alur interaksi utama untuk Administrator dan Pengguna.", s10Title: "Perancangan UML - Activity & Class Diagram", s10ActivityTitle: "Activity Diagram (Contoh: Menyampaikan Aspirasi)", s10ActivityDesc: "Menggambarkan alur kerja sebuah fitur.", s10ClassTitle: "Class Diagram", s10ClassDesc: "Menggambarkan struktur kelas dan hubungan antar kelas dalam sistem.", s10ClassList: "<strong>Kelas Utama:</strong> Admin, User, Content, Aspirasi, Pengaduan, Scheduler, Token, Layout, dan Notification.", s11Title: "Teknologi yang Digunakan", s11Subtitle: "Framework dan perangkat yang menjadi fondasi aplikasi.", s11CatHeader: "Kategori", s11TechHeader: "Teknologi", s11Cat1: "Bahasa Pemrograman", s11Cat2: "Framework UI", s11Cat3: "Desain UI", s11Cat4: "Database Lokal", s11Cat5: "Version Control", s12Title: "Hasil Pengujian", s12Subtitle: "Metrik performa dan fungsionalitas dari pengujian aplikasi.", s12HdrNo: "No", s12HdrFeature: "Fitur", s12HdrResult: "Hasil", s12HdrTime: "Waktu Respon", s12F1: "Menampilkan Beranda", s12F2: "Menampilkan Konten sesuai Scheduler", s12F3: "Menampilkan Daftar RUU", s12F4: "Navigasi ke Beranda", s12F5: "Mode Maintenance", s12F6: "Pengaturan Interval Update", s12Success: "Sukses", s12Instant: "Instan", s12PhotoGalleryTitle: "Foto Dokumentasi Lapangan", s13Title: "Kesimpulan", s13Subtitle: "Rangkuman hasil dari penelitian dan pengembangan aplikasi.", s13Point1: "Aplikasi berhasil mengatasi keterlambatan pembaruan informasi dengan sistem <strong>sinkronisasi konten</strong> yang efisien.", s13Point2: "Aplikasi berhasil <strong>diintegrasikan</strong> dengan baik dengan sistem informasi legislatif dan manajemen konten internal DPR RI.", s13Point3: "Desain antarmuka yang <strong>intuitif dan ramah pengguna</strong> berhasil diterapkan, memudahkan akses bagi berbagai kalangan masyarakat.", s13Point4: "Kinerja aplikasi telah dioptimalkan untuk berjalan <strong>lancar dan responsif</strong> pada perangkat keras mesin Kiosk.", s14Title: "Saran & Pengembangan Lanjutan", s14Subtitle: "Rekomendasi untuk iterasi dan implementasi di masa depan.", s14Sec1Title: "Pengembangan Fitur", s14Sec1Point1: "Menambahkan notifikasi real-time & pencarian canggih.", s14Sec1Point2: "Melakukan audit keamanan secara berkala.", s14Sec1Point3: "Mengumpulkan umpan balik pengguna secara rutin.", s14Sec2Title: "Implementasi & Pemeliharaan", s14Sec2Point1: "Melakukan pelatihan dan sosialisasi kepada masyarakat.", s14Sec2Point2: "Menyediakan tim pemeliharaan dan dukungan teknis yang responsif.", s15Title: "Terima Kasih", s15Subtitle: "Sesi Tanya Jawab",
+                    },
+                    ja: {
+                        pageTitle: "DPR RI キオスクプレゼンテーション - Muhammad Rusydy. M", presentationTitle: "KKP プレゼンテーション", presentationSubtitle: "DPR RI キオスク", languageLabel: "言語", fullscreenLabel: "フルスクリーン", exitFullscreenLabel: "フルスクリーンを終了", exportLabel: "エクスポート", navSlide1: "スライド1：タイトル", navSlide2: "スライド2：背景", navSlide3: "スライド3：問題点", navSlide4: "スライド4：研究目的", navSlide5: "スライド5：RAD手法", navSlide6: "スライド6：RADの段階", navSlide7: "スライド7：解決策", navSlide8: "スライド8：設計とアーキテクチャ", navSlide9: "スライド9：インタラクションフロー", navSlide10: "スライド10：UML設計", navSlide11: "スライド11：技術", navSlide12: "スライド12：テスト結果", navSlide13: "スライド13：結論", navSlide14: "スライド14：提案", navSlide15: "スライド15：ありがとうございました", s1Title: "DPR RIキオスクマシン向けネイティブAndroidベースアプリケーション開発における迅速アプリケーション開発（RAD）手法の適用", s1Major: "学部課程 - 情報システム", s1Supervisor: "指導教員", s2Title: "背景", s2Subtitle: "公共サービス向上における研究の文脈と緊急性。", s2Point1: "デジタル時代において、簡単にアクセスできる情報や公共サービスに対する国民のニーズは高まっています。", s2Point2: "DPR RIはキオスク技術を活用して、地域社会へのアクセシビリティとサービスを向上させる革新を進めています。", s2Point3: "キオスクマシンは、会期スケジュール、法案、DPR議員のプロフィールなどの情報を発信するために戦略的な場所に設置されています。", s2Point4: "本研究では、ソフトウェア開発におけるスピードと柔軟性を優先するアプローチである迅速アプリケーション開発（RAD）手法を適用します。", s3Title: "問題点の特定", s3Subtitle: "現在のキオスクシステムが直面している主な課題。", s3Problem1Title: "リアルタイムではないコンテンツ管理", s3Problem1Desc: "キオスクに表示される情報は最新の変更で更新されないことが多く、データの正確性が低下しています。", s3Problem2Title: "限定的なアクセスとインタラクション", s3Problem2Desc: "国民は依然として完全な情報へのアクセスが制限されており、意見提出などの直接的な対話チャネルが最小限です。", s3Problem3Title: "システム統合の課題", s3Problem3Desc: "キオスクマシンは、DPR RIの他の既存の情報システム（立法システム、CMS）との統合が困難です。", s4Title: "研究目的", s4Subtitle: "このアプリケーション開発を通じて達成すべき目標。", s4Point1: "立法情報を<strong>リアルタイム</strong>で表示できるネイティブAndroidベースのキオスクアプリケーションを開発する。", s4Point2: "<strong>直感的で使いやすい</strong>インターフェースを通じて、国民の情報アクセシビリティを向上させる。", s4Point3: "アプリケーションの設計と作成において、<strong>迅速アプリケーション開発（RAD）</strong>手法を構造的に実装する。", s4Point4: "<strong>意見や苦情の提出</strong>機能を通じて、国民とDPR RIとの対話を促進する。", s5Title: "開発手法：RAD", s5Subtitle: "反復的なフィードバックサイクルでスピードと俊敏性を重視する方法論。", s6Title: "迅速アプリケーション開発の段階", s6Subtitle: "RAD方法論における4つの主要なフェーズ。", s6Point1: "<strong>要件計画：</strong>利害関係者と共に、一般的なビジネスおよび技術的ニーズを特定します。", s6Point2: "<strong>ユーザー設計：</strong>ユーザーと開発者が協力してモデルを設計し、初期の機能的なプロトタイプを作成する対話的なフェーズ。", s6Point3: "<strong>構築：</strong>継続的なフィードバックに基づいて多くの修正を伴う迅速かつ反復的な開発。", s6Point4: "<strong>カットオーバー：</strong>システムが徹底的にテストされ、実装され、古いシステムを置き換える最終フェーズ。", s7Title: "提案された解決策", s7Subtitle: "既存の問題に対処するための技術的アプローチ。", s7Sol1Title: "リアルタイムコンテンツ管理", s7Sol1Desc: "情報が常に更新されるように、データ上書きによる同期メカニズム。", s7Sol2Title: "アクセシビリティの向上", s7Sol2Desc: "Jetpack Composeとマテリアルデザインを使用した直感的で魅力的なインターフェース。", s7Sol3Title: "国民対話チャネル", s7Sol3Desc: "キオスクを通じて直接意見や苦情を申し立てるための対話機能。", s7Sol4Title: "システム統合", s7Sol4Desc: "立法システムやCMSからデータを自動的に取得するための統合モジュール。", s8Title: "アプリケーションナビゲーション構造", s8Subtitle: "キオスクアプリケーションで使用される階層的なフロー。", s9Title: "アクターインタラクションフロー", s9Subtitle: "この図は、管理者とユーザーの主な対話フローを示しています。", s10Title: "UML設計 - アクティビティ図とクラス図", s10ActivityTitle: "アクティビティ図（例：意見の提出）", s10ActivityDesc: "特定の機能のワークフローを記述します。", s10ClassTitle: "クラス図", s10ClassDesc: "システム内のクラス構造とクラス間の関係を記述します。", s10ClassList: "<strong>主なクラス：</strong> Admin、User、Content、Aspirasi、Pengaduan、Scheduler、Token、Layout、およびNotification。", s11Title: "使用技術", s11Subtitle: "アプリケーションの基盤となるフレームワークとツール。", s11CatHeader: "カテゴリ", s11TechHeader: "技術", s11Cat1: "プログラミング言語", s11Cat2: "UIフレームワーク", s11Cat3: "UIデザイン", s11Cat4: "ローカルデータベース", s11Cat5: "バージョン管理", s12Title: "テスト結果", s12Subtitle: "アプリケーションテストからのパフォーマンスと機能性のメトリクス。", s12HdrNo: "番号", s12HdrFeature: "機能", s12HdrResult: "結果", s12HdrTime: "応答時間", s12F1: "ホームページの表示", s12F2: "スケジューラに従ってコンテンツを表示", s12F3: "法案リストの表示", s12F4: "ホームページへのナビゲーション", s12F5: "メンテナンスモード", s12F6: "更新間隔の設定", s12Success: "成功", s12Instant: "即時", s12PhotoGalleryTitle: "フィールドドキュメンテーション写真", s13Title: "結論", s13Subtitle: "研究とアプリケーション開発の結果の要約。", s13Point1: "効率的な<strong>コンテンツ同期</strong>システムにより、アプリケーションは情報の更新遅延を正常に克服しました。", s13Point2: "アプリケーションは、DPR RIの立法情報システムおよび内部コンテンツ管理と正常に<strong>統合</strong>されました。", s13Point3: "<strong>直感的で使いやすい</strong>インターフェース設計が正常に実装され、さまざまなコミュニティグループのアクセスが容易になりました。", s13Point4: "アプリケーションのパフォーマンスは、キオスクマシンのハードウェア上で<strong>スムーズかつ応答性よく</strong>動作するように最適化されています。", s14Title: "提案と今後の開発", s14Subtitle: "将来のイテレーションと実装のための推奨事項。", s14Sec1Title: "機能開発", s14Sec1Point1: "リアルタイム通知と高度な検索を追加する。", s14Sec1Point2: "定期的なセキュリティ監査を実施する。", s14Sec1Point3: "定期的にユーザーのフィードバックを収集する。", s14Sec2Title: "実装とメンテナンス", s14Sec2Point1: "国民向けのトレーニングと社会化を実施する。", s14Sec2Point2: "応答性の高いメンテナンスおよび技術サポートチームを提供する。", s15Title: "ありがとうございました", s15Subtitle: "質疑応答",
                     }
                 }
-
-                // Also check children of swapped element
-                translatableElements.forEach((element) => {
-                    const key = element.getAttribute("data-translate-key");
-                    if (translations[savedLang][key]) {
-                        element.innerHTML = translations[savedLang][key];
-                    }
-                });
-            });
-        </script>
-    </body>
+            }
+        }
+    </script>
+</body>
 </html>
